@@ -3,8 +3,12 @@ package trade.wayruha.paradex;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import trade.wayruha.paradex.util.BigDecimalSerializer;
+
+import java.math.BigDecimal;
 
 import static trade.wayruha.paradex.config.Constant.HTTP_CLIENT_TIMEOUT_MS;
 
@@ -72,6 +76,9 @@ public class ParadexConfig {
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+    SimpleModule module = new SimpleModule();
+    module.addSerializer(BigDecimal.class, new BigDecimalSerializer());
+    mapper.registerModule(module);
     return mapper;
   }
 }

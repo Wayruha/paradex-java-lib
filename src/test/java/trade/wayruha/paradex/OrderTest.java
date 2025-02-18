@@ -19,12 +19,17 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderTest {
+    static final String PUBLIC_KEY = "";
+    static final String PRIVATE_KEY = "";
+
     private static OrderService orderService;
     private static AuthService authService;
     private static final String CANCEL_ORDER_ID = "1739663638290201703994530000";
 
     public static void main(String[] args) {
         final ParadexConfig config = new ParadexConfig();
+        config.setPublicKey(PUBLIC_KEY);
+        config.setPrivateKey(PRIVATE_KEY);
         authService = new AuthService(config);
 
         final Long hours24 = (long) (24 * 60 * 60);
@@ -53,13 +58,13 @@ public class OrderTest {
         orderService.cancelOrderById(orderId);
     }
 
-    private static void testCreateOrder(){
+    private static void testCreateOrder() {
         OrderParameters orderParameters = new OrderParameters(
                 OrderInstruction.Gtc,
                 "BTC-USD-PERP",
-                new BigDecimal("93000"),
+                null,
                 OrderSide.Buy,
-                OrderType.Limit,
+                OrderType.Market,
                 new BigDecimal("1"),
                 List.of(OrderFlag.REDUCE_ONLY),
                 SelfTradePrevention.ExpireTaker,

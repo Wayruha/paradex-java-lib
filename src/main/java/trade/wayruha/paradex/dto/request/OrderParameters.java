@@ -1,5 +1,6 @@
 package trade.wayruha.paradex.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Value;
 import org.jetbrains.annotations.Nullable;
 import trade.wayruha.paradex.dto.OrderFlag;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Value
 public class OrderParameters {
+    @JsonIgnore
     OrderInstruction instruction;
 
     /**
@@ -25,11 +27,14 @@ public class OrderParameters {
     /**
      * Order flags, allow flag: REDUCE_ONLY
      */
+    @JsonIgnore
     List<OrderFlag> flags;
     /**
      * if empty EXPIRE_TAKER
      */
+    @JsonIgnore
     SelfTradePrevention selfTradePrevention;
     @Nullable
+    @JsonIgnore
     BigDecimal triggerPrice;
 }

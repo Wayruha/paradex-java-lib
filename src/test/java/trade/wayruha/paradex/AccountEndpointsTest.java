@@ -8,10 +8,16 @@ import trade.wayruha.paradex.service.MarketService;
 import trade.wayruha.paradex.util.AuthRequestBuilder;
 
 public class AccountEndpointsTest {
+    static final String PUBLIC_KEY = "";
+    static final String PRIVATE_KEY = "";
+
     private static AccountService accountService;
     private static AuthService authService;
     public static void main(String[] args) {
         final ParadexConfig config = new ParadexConfig();
+
+        config.setPublicKey(PUBLIC_KEY);
+        config.setPrivateKey(PRIVATE_KEY);
         authService = new AuthService(config);
 
         final Long hours24 = (long) (24 * 60 * 60);

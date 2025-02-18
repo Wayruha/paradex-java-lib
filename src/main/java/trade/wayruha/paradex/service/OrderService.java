@@ -67,11 +67,11 @@ public class OrderService extends ServiceBase{
 
         return new OrderCreateRequest(orderParameters.getInstruction(),
                 orderParameters.getMarket(),
-                orderParameters.getPrice().toPlainString(),
+                orderParameters.getPrice(),
                 orderParameters.getSide(),
                 signatureResult.getSignature(),
                 timestamp,
-                orderParameters.getSize().toPlainString(),
+                orderParameters.getSize(),
                 orderParameters.getType(),
                 "",
                 orderParameters.getFlags(),
