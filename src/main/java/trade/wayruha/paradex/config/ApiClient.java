@@ -3,6 +3,7 @@ package trade.wayruha.paradex.config;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -40,6 +41,18 @@ public class ApiClient {
 
   public <T> T executeSync(Call<T> call) {
     String rawRequestData = call.request().toString();
+    String requestBodyString = "";
+    if (call.request().body() != null) {
+      try {
+        Buffer buffer = new Buffer();
+        call.request().body().writeTo(buffer);
+        requestBodyString = buffer.readUtf8();
+      } catch (IOException e) {
+        log.error("Failed to read request body", e);
+      }
+    }
+
+    System.out.println(requestBodyString);
     try {
       final Response<T> response = call.execute();
       final T body = response.body();

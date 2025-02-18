@@ -28,6 +28,11 @@ public class HttpClientBuilder {
         .readTimeout(this.config.getHttpReadTimeout(), TimeUnit.MILLISECONDS)
         .writeTimeout(this.config.getHttpWriteTimeout(), TimeUnit.MILLISECONDS)
         .retryOnConnectionFailure(this.config.isRetryOnConnectionFailure());
+
+    if (config.getJwtToken() != null && !config.getJwtToken().isEmpty()) {
+      clientBuilder.addInterceptor(new JwtInterceptor(config.getJwtToken()));
+    }
+
     if (this.config.isHttpLogRequestData() && loggingInterceptor != null) {
       clientBuilder.addInterceptor(loggingInterceptor);
     }

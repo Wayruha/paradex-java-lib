@@ -11,10 +11,22 @@ import static trade.wayruha.paradex.config.Constant.HTTP_CLIENT_TIMEOUT_MS;
 @Data
 @NoArgsConstructor
 public class ParadexConfig {
-  private String host = "todo"; // replace with the actual host
+  private String host = "https://api.testnet.paradex.trade/v1/"; // https://api.testnet.paradex.trade/v1 - testnet
   private String webSocketHost = "todo"; // replace with the actual WebSocket host
-  private String privateKey;
-  private String publicKey;
+  private String privateKey = ""; // can be found on paradex page
+  private String publicKey = ""; // can be found on paradex page
+  private String JwtToken;
+
+  /**
+   * Can be found in Paradex system config https://app.paradex.trade/system-config
+   * <p>
+   * Mainnet - PRIVATE_SN_PARACLEAR_MAINNET
+   * </p>
+   * <p>
+   * Testnet - PRIVATE_SN_POTC_SEPOLIA
+   * </p>
+   */
+  private String chainId = "PRIVATE_SN_POTC_SEPOLIA";
 
   public ParadexConfig(String publicKey, String privateKey) {
     this.publicKey = publicKey;
