@@ -29,4 +29,7 @@ public interface OrderEndpoints {
 
     @GET("orders-history")
     Call<OrderHistoryResponse> getOrdersHistory(@QueryMap Map<String, String> queryParams);
+
+    @GET("orders/by_client_id/{client_id}")
+    Call<OrderDetailsResponse> getActiveOrderByClientOrderId(@Path("client_id") String clientId);
 }

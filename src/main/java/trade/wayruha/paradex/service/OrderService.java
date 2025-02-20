@@ -54,4 +54,12 @@ public class OrderService extends ServiceBase{
         final String signature = OrderSigner.sign(orderParameters, chainId, accountAddress, privateAddress, timestamp);
         return new OrderCreateRequest(orderParameters, signature, timestamp, 0);
     }
+
+    /**
+     * @apiNote if there are multiple orders with the same client_id, will return the first order with that id
+     * @return only active order
+     */
+    public OrderDetailsResponse getOrderByClientOrderId(String clientOrderId) {
+        return client.executeSync(orderApi.getActiveOrderByClientOrderId(clientOrderId));
+    }
 }

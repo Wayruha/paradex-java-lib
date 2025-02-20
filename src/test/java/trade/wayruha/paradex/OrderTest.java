@@ -44,6 +44,7 @@ public class OrderTest {
         testGetOrderDetailsByOrderId("1739635538240201703942180000");
         testGetAllPositions();
         testGetOrdersHistory();
+        testGetOrderByClientOrderId("123");
     }
 
     private static void testGetAllOpenOrders() {
@@ -109,5 +110,9 @@ public class OrderTest {
         );
         OrderHistoryResponse ordersHistory = orderService.getOrdersHistory(params);
         ordersHistory.getOrders().forEach(System.out::println);
+    }
+
+    private static void testGetOrderByClientOrderId(String clientOrderId) {
+        System.out.println(orderService.getOrderByClientOrderId(clientOrderId));
     }
 }
