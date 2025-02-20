@@ -8,10 +8,12 @@ import trade.wayruha.paradex.ParadexConfig;
 import trade.wayruha.paradex.dto.OrderSide;
 import trade.wayruha.paradex.dto.OrderType;
 import trade.wayruha.paradex.dto.request.OrderCreateRequest;
+import trade.wayruha.paradex.dto.request.OrderHistoryQueryParams;
 import trade.wayruha.paradex.dto.request.OrderParameters;
 import trade.wayruha.paradex.dto.response.AllOpenOrdersResponse;
 import trade.wayruha.paradex.dto.response.AllPositionsResponse;
 import trade.wayruha.paradex.dto.response.OrderDetailsResponse;
+import trade.wayruha.paradex.dto.response.OrderHistoryResponse;
 import trade.wayruha.paradex.service.endpoint.OrderEndpoints;
 
 import java.math.BigDecimal;
@@ -50,6 +52,10 @@ public class OrderService extends ServiceBase{
     public OrderDetailsResponse createOrder(OrderParameters orderParameters) {
         final OrderCreateRequest orderCreateRequest = buildOrder(orderParameters);
         return client.executeSync(orderApi.createOrder(orderCreateRequest));
+    }
+
+    public OrderHistoryResponse getOrdersHistory(OrderHistoryQueryParams params) {
+        return client.executeSync(orderApi.getOrdersHistory(params.toQueryMap()));
     }
 
     public OrderCreateRequest buildOrder(OrderParameters orderParameters) {

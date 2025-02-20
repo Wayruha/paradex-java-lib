@@ -6,6 +6,9 @@ import trade.wayruha.paradex.dto.request.OrderCreateRequest;
 import trade.wayruha.paradex.dto.response.AllOpenOrdersResponse;
 import trade.wayruha.paradex.dto.response.AllPositionsResponse;
 import trade.wayruha.paradex.dto.response.OrderDetailsResponse;
+import trade.wayruha.paradex.dto.response.OrderHistoryResponse;
+
+import java.util.Map;
 
 public interface OrderEndpoints {
 
@@ -23,4 +26,7 @@ public interface OrderEndpoints {
 
     @DELETE("orders/{order_id}")
     Call<Void> cancelOrderById(@Path("order_id") String orderId);
+
+    @GET("orders-history")
+    Call<OrderHistoryResponse> getOrdersHistory(@QueryMap Map<String, String> queryParams);
 }

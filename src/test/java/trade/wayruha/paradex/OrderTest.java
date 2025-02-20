@@ -1,16 +1,11 @@
 package trade.wayruha.paradex;
 
-import trade.wayruha.paradex.dto.OrderFlag;
-import trade.wayruha.paradex.dto.OrderSide;
-import trade.wayruha.paradex.dto.OrderType;
-import trade.wayruha.paradex.dto.SelfTradePrevention;
+import trade.wayruha.paradex.dto.*;
 import trade.wayruha.paradex.dto.request.AuthRequest;
+import trade.wayruha.paradex.dto.request.OrderHistoryQueryParams;
 import trade.wayruha.paradex.dto.request.OrderInstruction;
 import trade.wayruha.paradex.dto.request.OrderParameters;
-import trade.wayruha.paradex.dto.response.AllOpenOrdersResponse;
-import trade.wayruha.paradex.dto.response.AllPositionsResponse;
-import trade.wayruha.paradex.dto.response.AuthResponse;
-import trade.wayruha.paradex.dto.response.OrderDetailsResponse;
+import trade.wayruha.paradex.dto.response.*;
 import trade.wayruha.paradex.service.AuthService;
 import trade.wayruha.paradex.service.OrderService;
 import trade.wayruha.paradex.util.AuthRequestBuilder;
@@ -48,6 +43,7 @@ public class OrderTest {
         testCancelOrderById(CANCEL_ORDER_ID);
         testGetOrderDetailsByOrderId("1739635538240201703942180000");
         testGetAllPositions();
+        testGetOrdersHistory();
     }
 
     private static void testGetAllOpenOrders() {
@@ -97,5 +93,21 @@ public class OrderTest {
     private static void testGetAllPositions() {
         AllPositionsResponse allPositions = orderService.getAllPositions();
         allPositions.getOrders().forEach(System.out::println);
+    }
+
+    private static void testGetOrdersHistory() {
+        final OrderHistoryQueryParams params = new OrderHistoryQueryParams(
+                null,
+                null,
+                null,
+                null,
+                null,
+                OrderSide.Buy,
+                null,
+                OrderStatus.Closed,
+                OrderType.Market
+        );
+        OrderHistoryResponse ordersHistory = orderService.getOrdersHistory(params);
+        ordersHistory.getOrders().forEach(System.out::println);
     }
 }
