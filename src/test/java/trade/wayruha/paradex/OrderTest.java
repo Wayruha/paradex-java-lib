@@ -58,7 +58,7 @@ public class OrderTest {
     private static void testCreateMarketOrder() {
         OrderParameters orderParameters = new OrderParameters(
                 OrderInstruction.Gtc,
-                "BTC-USD-PERP",
+                "ETH-USD-PERP",
                 null,
                 OrderSide.Buy,
                 OrderType.Market,
@@ -73,7 +73,7 @@ public class OrderTest {
     private static void testCreateLimitOrder() {
         OrderParameters orderParameters = new OrderParameters(
                 OrderInstruction.Gtc,
-                "BTC-USD-PERP",
+                "ETH-USD-PERP",
                 new BigDecimal("100000"),
                 OrderSide.Sell,
                 OrderType.Limit,
