@@ -1,7 +1,10 @@
 package trade.wayruha.paradex.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 import trade.wayruha.paradex.dto.OrderFlag;
 import trade.wayruha.paradex.dto.OrderSide;
@@ -11,7 +14,9 @@ import trade.wayruha.paradex.dto.SelfTradePrevention;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderParameters {
     @JsonIgnore
     OrderInstruction instruction;
@@ -24,15 +29,24 @@ public class OrderParameters {
     OrderSide side;
     OrderType type;
     BigDecimal size;
+
+    /**
+     * unique id assigned by user
+     */
+    @JsonProperty("client_id")
+    String clientId;
+
     /**
      * Order flags, allow flag: REDUCE_ONLY
      */
     @JsonIgnore
     List<OrderFlag> flags;
+
     /**
-     * if empty EXPIRE_TAKER
+     * Self Trade Prevention, EXPIRE_MAKER, EXPIRE_TAKER or EXPIRE_BOTH, if empty EXPIRE_TAKER
      */
     @JsonIgnore
+    @JsonProperty("stp")
     SelfTradePrevention selfTradePrevention;
     @Nullable
     @JsonIgnore

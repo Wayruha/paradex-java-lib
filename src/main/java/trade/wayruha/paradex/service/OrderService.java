@@ -4,7 +4,6 @@ import com.swmansion.starknet.crypto.StarknetCurve;
 import com.swmansion.starknet.crypto.StarknetCurveSignature;
 import com.swmansion.starknet.data.TypedData;
 import com.swmansion.starknet.data.types.Felt;
-import com.swmansion.starknet.signer.StarkCurveSigner;
 import trade.wayruha.paradex.ParadexConfig;
 import trade.wayruha.paradex.dto.OrderSide;
 import trade.wayruha.paradex.dto.OrderType;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 public class OrderService extends ServiceBase{
     private final OrderEndpoints orderApi;
     private final String chainId;
-    private final StarkCurveSigner starkCurveSigner;
     private final Felt accountAddress;
     private final Felt privateAddress;
 
@@ -33,7 +31,6 @@ public class OrderService extends ServiceBase{
         this.chainId = config.getChainId();
         this.privateAddress = Felt.fromHex(config.getPrivateKey());
         this.accountAddress = Felt.fromHex(config.getPublicKey());
-        this.starkCurveSigner = new StarkCurveSigner(privateAddress);
     }
 
     public AllOpenOrdersResponse getAllOpenOrders() {
@@ -65,19 +62,7 @@ public class OrderService extends ServiceBase{
 
         final SignatureResult signatureResult = getSignature(orderMessage);
 
-        return new OrderCreateRequest(orderParameters.getInstruction(),
-                orderParameters.getMarket(),
-                orderParameters.getPrice(),
-                orderParameters.getSide(),
-                signatureResult.getSignature(),
-                timestamp,
-                orderParameters.getSize(),
-                orderParameters.getType(),
-                "",
-                orderParameters.getFlags(),
-                0,
-                orderParameters.getSelfTradePrevention(),
-                orderParameters.getTriggerPrice() != null ? orderParameters.getTriggerPrice().toPlainString() : null);
+        return new OrderCreateRequest(orderParameters, signatureResult.signature(), timestamp, 0);
     }
 
     private SignatureResult getSignature(String message) {
@@ -94,10 +79,14 @@ public class OrderService extends ServiceBase{
         return new SignatureResult(signatureStr, messageHashStr);
     }
 
+    /**
+     * @param chainId in full format e.g. PRIVATE_SN_POTC_SEPOLIA
+     */
     private static String createOrderMessage(String chainId, long timestamp, String market, OrderSide side, OrderType orderType, BigDecimal size, BigDecimal price) {
         int chainSide = (side == OrderSide.Buy) ? 1 : 2;
         BigDecimal chainPrice = (orderType == OrderType.Market) ? BigDecimal.ZERO : price.scaleByPowerOfTen(8);
         BigDecimal chainSize = size.scaleByPowerOfTen(8);
+        String chainIdHex = Felt.fromShortString(chainId).hexString();
 
         return String.format(
                 """
@@ -129,7 +118,7 @@ public class OrderService extends ServiceBase{
                     }
                 }
                 """,
-                timestamp, market, chainSide, orderType.name(), chainSize.toPlainString(), chainPrice.toPlainString(), chainId
+                timestamp, market, chainSide, orderType.getName(), chainSize.toPlainString(), chainPrice.toPlainString(), chainIdHex
         );
     }
 
@@ -140,21 +129,5 @@ public class OrderService extends ServiceBase{
                 .collect(Collectors.joining(",", "[", "]")); // Keep brackets for JSON format
     }
 
-    private static class SignatureResult {
-        private final String signature;
-        private final String messageHash;
-
-        public SignatureResult(String signature, String messageHash) {
-            this.signature = signature;
-            this.messageHash = messageHash;
-        }
-
-        public String getSignature() {
-            return signature;
-        }
-
-        public String getMessageHash() {
-            return messageHash;
-        }
-    }
+    private record SignatureResult(String signature, String messageHash) {}
 }

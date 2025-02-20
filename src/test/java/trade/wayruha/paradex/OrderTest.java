@@ -19,8 +19,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderTest {
-    static final String PUBLIC_KEY = "";
-    static final String PRIVATE_KEY = "";
+    static final String PUBLIC_KEY = "0x5259cb50ed04675b086e173ec508410a55a86028b2cd37df6a5a5526472094e";
+    static final String PRIVATE_KEY = "0x1680c30ef3d83b2f114bf5146ea5ad372b3f4f4e7eec81e8bd71600fe085766";
 
     private static OrderService orderService;
     private static AuthService authService;
@@ -42,11 +42,12 @@ public class OrderTest {
 
         orderService = new OrderService(config);
 
-//        testGetAllOpenOrders();
-        testCreateOrder();
-//        testCancelOrderById(CANCEL_ORDER_ID);
-//        testGetOrderDetailsByOrderId("1739635538240201703942180000");
-//        testGetAllPositions();
+        testGetAllOpenOrders();
+        testCreateMarketOrder();
+        testCreateLimitOrder();
+        testCancelOrderById(CANCEL_ORDER_ID);
+        testGetOrderDetailsByOrderId("1739635538240201703942180000");
+        testGetAllPositions();
     }
 
     private static void testGetAllOpenOrders() {
@@ -58,7 +59,7 @@ public class OrderTest {
         orderService.cancelOrderById(orderId);
     }
 
-    private static void testCreateOrder() {
+    private static void testCreateMarketOrder() {
         OrderParameters orderParameters = new OrderParameters(
                 OrderInstruction.Gtc,
                 "BTC-USD-PERP",
@@ -66,6 +67,22 @@ public class OrderTest {
                 OrderSide.Buy,
                 OrderType.Market,
                 new BigDecimal("1"),
+                "123",
+                List.of(OrderFlag.REDUCE_ONLY),
+                SelfTradePrevention.ExpireTaker,
+                null);
+        System.out.println(orderService.createOrder(orderParameters));
+    }
+
+    private static void testCreateLimitOrder() {
+        OrderParameters orderParameters = new OrderParameters(
+                OrderInstruction.Gtc,
+                "BTC-USD-PERP",
+                new BigDecimal("100000"),
+                OrderSide.Sell,
+                OrderType.Limit,
+                new BigDecimal("1"),
+                "123",
                 List.of(OrderFlag.REDUCE_ONLY),
                 SelfTradePrevention.ExpireTaker,
                 null);
