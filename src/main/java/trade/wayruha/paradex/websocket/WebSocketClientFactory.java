@@ -38,22 +38,16 @@ public class WebSocketClientFactory {
         return client;
     }
 
+    //private subscriptions
     //todo to be tested
     public WebSocketClient<OrderDetailsResponse> userOrderUpdateSubscription(WebSocketCallback<OrderDetailsResponse> callback) {
-        Objects.requireNonNull(config.getPublicKey());
-        Objects.requireNonNull(config.getPrivateKey());
-        final String jwtToken = authenticate();
-        List<WSRequest> channels = new ArrayList<>();
-        channels.add(new Auth(jwtToken));
+        Objects.requireNonNull(config.getJwtToken(), "jwt token is required for userOrderUpdateSubscription");
+        final List<WSRequest> channels = new ArrayList<>();
+        channels.add(new Auth(config.getJwtToken()));
         channels.add(new Subscription("orders.ALL"));
         final WebSocketClient<OrderDetailsResponse> client = new WebSocketClient<>(config, objectMapper, callback);
         client.connect(channels);
         return client;
-    }
-
-    private String authenticate() {
-        final AuthResponse authenticate = authService.authenticate();
-        return authenticate.getJwtToken();
     }
 
     private static Subscription buildOrderBookSubscription(String marketSymbol){
