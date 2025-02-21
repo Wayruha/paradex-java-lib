@@ -12,7 +12,7 @@ import trade.wayruha.paradex.dto.response.OrderHistoryResponse;
 import trade.wayruha.paradex.service.endpoint.OrderEndpoints;
 import trade.wayruha.paradex.util.OrderSigner;
 
-public class OrderService extends ServiceBase{
+public class OrderService extends ServiceBase {
     private final OrderEndpoints orderApi;
     private final String chainId;
     private final Felt accountAddress;
@@ -38,7 +38,9 @@ public class OrderService extends ServiceBase{
         return client.executeSync(orderApi.getAllPositions());
     }
 
-    public void cancelOrderById(String orderId) { client.executeSync(orderApi.cancelOrderById(orderId)); }
+    public void cancelOrderById(String orderId) {
+        client.executeSync(orderApi.cancelOrderById(orderId));
+    }
 
     public OrderDetailsResponse createOrder(OrderParameters orderParameters) {
         final OrderCreateRequest orderCreateRequest = buildOrder(orderParameters);
@@ -56,8 +58,8 @@ public class OrderService extends ServiceBase{
     }
 
     /**
-     * @apiNote if there are multiple orders with the same client_id, will return the first order with that id
      * @return only active order
+     * @apiNote if there are multiple orders with the same client_id, will return the first order with that id
      */
     public OrderDetailsResponse getOrderByClientOrderId(String clientOrderId) {
         return client.executeSync(orderApi.getActiveOrderByClientOrderId(clientOrderId));

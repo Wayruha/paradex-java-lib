@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class OrderSigner {
 
+    //todo similar:chainId, public\privateKey does not change an is boud to config. we can remove them from parameters for simplicity
     public static String sign(OrderParameters orderParameters, String chainId, Felt publicAccAddress, Felt privateAccAddress, long timestamp) {
         // Create the order message
         final String orderMessage = createOrderMessage(chainId, timestamp, orderParameters.getMarket(), orderParameters.getSide(), orderParameters.getType(), orderParameters.getSize(), orderParameters.getPrice());

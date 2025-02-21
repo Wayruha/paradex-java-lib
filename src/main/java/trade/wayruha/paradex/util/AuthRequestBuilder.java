@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 public class AuthRequestBuilder {
 
+    //todo does it make sense to build it from Config, given that publicKey, private and chainId are static
+    // and therefore some operations could be pre-computed and stored as a field?
     /**
      * Builds AuthRequest previously creating authentication signature
      * @param chainId special id of paradox project e.g. mainnet or testnet. Can be found at /system-config endpoint of project host

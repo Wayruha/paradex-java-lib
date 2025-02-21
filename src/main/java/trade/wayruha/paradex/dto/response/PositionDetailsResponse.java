@@ -5,60 +5,62 @@ import lombok.Data;
 import trade.wayruha.paradex.dto.OrderStatus;
 import trade.wayruha.paradex.dto.PositionSide;
 
+import java.math.BigDecimal;
+
 @Data
 public class PositionDetailsResponse {
     @JsonProperty("average_entry_price")
-    private String averageEntryPrice;
+    private BigDecimal averageEntryPrice;
 
     @JsonProperty("average_entry_price_usd")
-    private String averageEntryPriceUsd;
+    private BigDecimal averageEntryPriceUsd;
 
     @JsonProperty("average_exit_price")
-    private String averageExitPrice;
+    private BigDecimal averageExitPrice;
 
     @JsonProperty("cached_funding_index")
     private String cachedFundingIndex;
 
     @JsonProperty("closed_at")
     private Long closedAt;
-    private String cost;
+    private BigDecimal cost;
 
     @JsonProperty("cost_usd")
-    private String costUsd;
+    private BigDecimal costUsd;
 
     @JsonProperty("created_at")
     private Long createdAt;
     private String id;
 
     @JsonProperty("last_fill_id")
-    private String lastFillId;
+    private String lastFillId; //todo string or number?
 
     @JsonProperty("last_updated_at")
     private Long lastUpdatedAt;
-    private String leverage;
+    private double leverage; //todo int or double?
 
     @JsonProperty("liquidation_price")
-    private String liquidationPrice;
+    private BigDecimal liquidationPrice;
     /**
      * Trading symbol
      */
     private String market;
 
     @JsonProperty("realized_positional_funding_pnl")
-    private String realizedPositionalFundingPnl;
+    private BigDecimal realizedPositionalFundingPnl;
 
     @JsonProperty("realized_positional_pnl")
-    private String realizedPositionalPnl;
+    private BigDecimal realizedPositionalPnl;
 
     @JsonProperty("seq_no")
-    private Long seqNo;
+    private Long sequenceNumber;
     private PositionSide side;
-    private String size;
+    private BigDecimal size;
     private OrderStatus status;
 
     @JsonProperty("unrealized_funding_pnl")
-    private String unrealizedFundingPnl;
+    private BigDecimal unrealizedFundingPnl;
 
     @JsonProperty("unrealized_pnl")
-    private String unrealizedPnl;
+    private BigDecimal unrealizedPnl;
 }

@@ -13,11 +13,7 @@ public class AuthTest {
         final ParadexConfig config = new ParadexConfig();
         authService = new AuthService(config);
 
-        final Long hours24 = (long) (24 * 60 * 60); //todo: maybe move to config, but the value is optional
-
-        AuthRequest authRequest = AuthRequestBuilder.buildRequest(config.getPublicKey(), config.getPrivateKey(), config.getChainId(), hours24);
-
-        AuthResponse response = authService.authenticate(authRequest);
+        AuthResponse response = authService.authenticate();
         System.out.println(response);
     }
 }

@@ -1,16 +1,14 @@
-package trade.wayruha.paradex.dto.request;
+package trade.wayruha.paradex.dto.wsresponse;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum OrderInstruction {
-    Gtc("GTC"),
-    Ioc("IOC"),
-    PostOnly("POST_ONLY");
+public enum OrderBookUpdateType {
+    SNAPSHOT("s"), DELTA("d");
 
-    @Getter
     @JsonValue
+    @Getter
     private final String name;
 }

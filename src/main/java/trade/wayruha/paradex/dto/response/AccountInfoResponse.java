@@ -12,28 +12,28 @@ public class AccountInfoResponse {
      * User’s starknet account
      */
     @JsonProperty("account")
-    String account;
+    private String account;
 
     /**
      * Current account value [with unrealized P&Ls]
      */
     @JsonProperty("account_value")
-    BigDecimal accountValue;
+    private BigDecimal accountValue;
 
     /**
      * Free collateral available (Account value in excess of Initial Margin required)
      */
     @JsonProperty("free_collateral")
-    BigDecimal freeCollateral;
+    private BigDecimal freeCollateral;
 
     @JsonProperty("initial_margin_requirement")
-    BigDecimal initialMarginRequirement;
+    private BigDecimal initialMarginRequirement;
 
     @JsonProperty("maintenance_margin_requirement")
-    BigDecimal maintenanceMarginRequirement;
+    private BigDecimal maintenanceMarginRequirement;
 
     @JsonProperty("margin_cushion")
-    BigDecimal marginCushion;
+    private BigDecimal marginCushion;
 
     /**
      * Unique increasing number (non-sequential) that is assigned to this account update. Can be used to deduplicate multiple feeds
@@ -42,11 +42,11 @@ public class AccountInfoResponse {
     long seqNo;
 
     @JsonProperty("settlement_asset")
-    String settlementAsset;
-    String status;
+    private String settlementAsset;
+    private String status;
 
     @JsonProperty("total_collateral")
-    BigDecimal totalCollateral;
+    private BigDecimal totalCollateral;
 
     @JsonProperty("updated_at")
     long updatedAt;

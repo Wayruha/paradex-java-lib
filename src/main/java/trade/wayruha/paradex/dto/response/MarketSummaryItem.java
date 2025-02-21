@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+//todo naming pls
 @Data
 public class MarketSummaryItem {
     private BigDecimal ask;
@@ -42,7 +43,7 @@ public class MarketSummaryItem {
     private BigDecimal volume_24h; //24 hour volume in USD
 
     @Data
-    private class Greeks{
+    private class Greeks {
         private String delta; //market delta
         private String gamma; //market gamma
         private String vega; //market vega

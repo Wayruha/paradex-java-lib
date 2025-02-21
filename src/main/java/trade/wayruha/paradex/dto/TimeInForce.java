@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum OrderSide {
-    Buy("BUY", "1"),
-    Sell("SELL", "2");
+public enum TimeInForce {
+    Gtc("GTC"),
+    Ioc("IOC"),
+    PostOnly("POST_ONLY");
 
     @JsonValue
     private final String name;
-    private final String code;
 }

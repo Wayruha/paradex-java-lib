@@ -1,4 +1,5 @@
-package trade.wayruha.paradex.dto.response;
+/*
+package trade.wayruha.paradex.dto.wsresponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -8,12 +9,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class OrderDetailsResponse {
-    private String id;
+public class OrderUpdateDto {
     private String account;
-
-    @JsonProperty("avg_fill_price")
-    private BigDecimal avgFillPrice;
 
     @JsonProperty("cancel_reason")
     private CancelReason cancelReason;
@@ -22,41 +19,47 @@ public class OrderDetailsResponse {
     private String clientId;
 
     @JsonProperty("created_at")
-    private Long createdAt;
+    private long createdAt;
 
-    private List<OrderFlag> flags;
+    private String id;
 
     @JsonProperty("instruction")
     private TimeInForce timeInForce;
 
     @JsonProperty("last_updated_at")
-    private Long lastUpdatedAt;
+    private long lastUpdatedAt;
 
     private String market;
 
     private BigDecimal price;
 
-    @JsonProperty("published_at")
-    private Long publishedAt;
-
-    @JsonProperty("received_at")
-    private Long receivedAt;
-
     @JsonProperty("remaining_size")
     private BigDecimal remainingSize;
 
-    @JsonProperty("seq_no")
-    private Long sequenceNumber;
-
     private OrderSide side;
+
     private BigDecimal size;
+
     private OrderStatus status;
-    @JsonProperty("stp")
-    private SelfTradePrevention selfTradePrevention;
-    private Long timestamp;
+
+    private long timestamp;
+
+    private OrderType type;
+
+    @JsonProperty("seq_no")
+    private long seqNo;
+
+    @JsonProperty("avg_fill_price")
+    private BigDecimal avgFillPrice;
+
+    @JsonProperty("received_at")
+    private long receivedAt;
+
+    @JsonProperty("published_at")
+    private long publishedAt;
+
+    private List<String> flags;
 
     @JsonProperty("trigger_price")
     private BigDecimal triggerPrice;
-
-    private OrderType type;
-}
+}*/

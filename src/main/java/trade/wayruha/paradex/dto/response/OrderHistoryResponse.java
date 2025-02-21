@@ -11,5 +11,5 @@ public class OrderHistoryResponse {
     private String prev;
 
     @JsonProperty("results")
-    List<OrderDetailsResponse> orders;
+    private List<OrderDetailsResponse> orders;
 }

@@ -7,9 +7,8 @@ import java.math.BigDecimal;
 
 @Data
 public class BalanceItem {
-
     @JsonProperty("last_updated_at")
-    long lastUpdatedAt;
-    BigDecimal size;
-    String token;
+    private long lastUpdatedAt;
+    private BigDecimal size;
+    private String token;
 }
