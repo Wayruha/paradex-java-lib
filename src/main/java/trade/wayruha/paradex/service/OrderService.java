@@ -14,16 +14,14 @@ import trade.wayruha.paradex.util.OrderSigner;
 
 public class OrderService extends ServiceBase {
     private final OrderEndpoints orderApi;
-    private final String chainId;
-    private final Felt accountAddress;
-    private final Felt privateAddress;
+    private final OrderSigner orderSigner;
 
     public OrderService(ParadexConfig config) {
         super(config);
         this.orderApi = createService(OrderEndpoints.class);
-        this.chainId = config.getChainId();
-        this.privateAddress = Felt.fromHex(config.getPrivateKey());
-        this.accountAddress = Felt.fromHex(config.getPublicKey());
+        final Felt privateAddress = Felt.fromHex(config.getPrivateKey());
+        final Felt accountAddress = Felt.fromHex(config.getPublicKey());
+        this.orderSigner = new OrderSigner(config.getChainId(), accountAddress, privateAddress);
     }
 
     public AllOpenOrdersResponse getAllOpenOrders() {
@@ -53,7 +51,7 @@ public class OrderService extends ServiceBase {
 
     public OrderCreateRequest buildOrder(OrderParameters orderParameters) {
         final long timestamp = System.currentTimeMillis();
-        final String signature = OrderSigner.sign(orderParameters, chainId, accountAddress, privateAddress, timestamp);
+        final String signature = orderSigner.sign(orderParameters, timestamp);
         return new OrderCreateRequest(orderParameters, signature, timestamp, 0);
     }
 

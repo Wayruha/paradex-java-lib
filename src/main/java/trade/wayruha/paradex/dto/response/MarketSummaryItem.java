@@ -1,24 +1,40 @@
 package trade.wayruha.paradex.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
-//todo naming pls
 @Data
 public class MarketSummaryItem {
     private BigDecimal ask;
-    private BigDecimal ask_iv; //ask implied volatility, for options
+
+    @JsonProperty("ask_iv")
+    private BigDecimal askIv; //ask implied volatility, for options
     private BigDecimal bid;
-    private BigDecimal bid_iv; //bid implied volatility, for options
-    private Long created_at;
+
+    @JsonProperty("bid_iv")
+    private BigDecimal bidIv; //bid implied volatility, for options
+
+    @JsonProperty("created_at")
+    private Long createdAt;
     private String delta; //deprecated
-    private String funding_rate;
-    private String future_funding_rate; //Future funding rate, for options
-    private Greeks greeks; //todo
-    private String last_iv; //last traded price volatility, for options
-    private BigDecimal last_traded_price;
-    private String mark_iv; //mark implied volatility, for options
+
+    @JsonProperty("funding_rate")
+    private String fundingRate;
+
+    @JsonProperty("future_funding_rate")
+    private String futureFundingRate; //Future funding rate, for options
+    private Greeks greeks;
+
+    @JsonProperty("last_iv")
+    private String lastIv; //last traded price volatility, for options
+
+    @JsonProperty("last_traded_price")
+    private BigDecimal lastTradedPrice;
+
+    @JsonProperty("mark_iv")
+    private String markIv; //mark implied volatility, for options
 
     /**
      * The mark price of a perpetual future instrument is calculated as : markPrice = spotOraclePrice * (1 + FairBasis).
@@ -34,13 +50,24 @@ public class MarketSummaryItem {
      * </p>
      * details at : https://docs.paradex.trade/documentation/risk-system/mark-price-calculation
      */
-    private BigDecimal mark_price;
-    private BigDecimal open_interest; //open interest in base currency
-    private BigDecimal price_change_rate_24h;
+    @JsonProperty("mark_price")
+    private BigDecimal markPrice;
+
+    @JsonProperty("open_interest")
+    private BigDecimal openInterest; //open interest in base currency
+
+    @JsonProperty("price_change_rate_24h")
+    private BigDecimal priceChangeRate24h;
     private String symbol;
-    private BigDecimal total_volume; //Lifetime total traded volume in USD
-    private BigDecimal underlying_price; //Underlying asset price (spot oracle price)
-    private BigDecimal volume_24h; //24 hour volume in USD
+
+    @JsonProperty("total_volume")
+    private BigDecimal totalVolume; //Lifetime total traded volume in USD
+
+    @JsonProperty("underlying_price")
+    private BigDecimal underlyingPrice; //Underlying asset price (spot oracle price)
+
+    @JsonProperty("volume_24h")
+    private BigDecimal volume24h; //24 hour volume in USD
 
     @Data
     private class Greeks {

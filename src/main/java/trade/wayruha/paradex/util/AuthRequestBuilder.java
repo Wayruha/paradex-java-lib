@@ -3,24 +3,27 @@ package trade.wayruha.paradex.util;
 import com.swmansion.starknet.data.TypedData;
 import com.swmansion.starknet.data.types.Felt;
 import com.swmansion.starknet.signer.StarkCurveSigner;
+import lombok.RequiredArgsConstructor;
 import trade.wayruha.paradex.dto.request.AuthRequest;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class AuthRequestBuilder {
 
-    //todo does it make sense to build it from Config, given that publicKey, private and chainId are static
-    // and therefore some operations could be pre-computed and stored as a field?
+    private final String privateKey;
+    private final String publicKey;
+    private final String chainId;
+
     /**
      * Builds AuthRequest previously creating authentication signature
-     * @param chainId special id of paradox project e.g. mainnet or testnet. Can be found at /system-config endpoint of project host
      * @param expiryDurationSeconds lifetime of returned JWT token in seconds
      */
-    public static AuthRequest buildRequest(String publicKeyStr, String privateKeyStr, String chainId, Long expiryDurationSeconds) {
-        final Felt accountAddress = Felt.fromHex(publicKeyStr);
-        final Felt privateKey = Felt.fromHex(privateKeyStr);
+    public AuthRequest buildRequest(Long expiryDurationSeconds) {
+        final Felt accountAddress = Felt.fromHex(publicKey);
+        final Felt privateKeyFelt = Felt.fromHex(privateKey);
 
         // Get current timestamp in seconds
         final long timestamp = System.currentTimeMillis() / 1000;
@@ -35,7 +38,7 @@ public class AuthRequestBuilder {
         final TypedData typedData = TypedData.fromJsonString(authMessage);
 
         // Create new StarkCurveSigner with the private key
-        final StarkCurveSigner scSigner = new StarkCurveSigner(privateKey);
+        final StarkCurveSigner scSigner = new StarkCurveSigner(privateKeyFelt);
 
         // Sign the typed data
         final List<Felt> signature = scSigner.signTypedData(typedData, accountAddress);
@@ -46,7 +49,7 @@ public class AuthRequestBuilder {
                 .collect(Collectors.toList());
         final String signatureStr = convertBigIntListToSignatureString(signatureBigInt);
 
-        return new AuthRequest(publicKeyStr, signatureStr, Long.toString(timestamp), Long.toString(expiry));
+        return new AuthRequest(publicKey, signatureStr, Long.toString(timestamp), Long.toString(expiry));
     }
 
     private static String convertBigIntListToSignatureString(List<BigInteger> list) {

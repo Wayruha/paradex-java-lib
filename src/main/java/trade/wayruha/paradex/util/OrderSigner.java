@@ -4,6 +4,7 @@ import com.swmansion.starknet.crypto.StarknetCurve;
 import com.swmansion.starknet.crypto.StarknetCurveSignature;
 import com.swmansion.starknet.data.TypedData;
 import com.swmansion.starknet.data.types.Felt;
+import lombok.AllArgsConstructor;
 import trade.wayruha.paradex.dto.OrderSide;
 import trade.wayruha.paradex.dto.OrderType;
 import trade.wayruha.paradex.dto.request.OrderParameters;
@@ -13,14 +14,18 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class OrderSigner {
 
-    //todo similar:chainId, public\privateKey does not change an is boud to config. we can remove them from parameters for simplicity
-    public static String sign(OrderParameters orderParameters, String chainId, Felt publicAccAddress, Felt privateAccAddress, long timestamp) {
+    private final String chainId;
+    private final Felt publicAccountAddress;
+    private final Felt privateAccountAddress;
+
+    public String sign(OrderParameters orderParameters, long timestamp) {
         // Create the order message
         final String orderMessage = createOrderMessage(chainId, timestamp, orderParameters.getMarket(), orderParameters.getSide(), orderParameters.getType(), orderParameters.getSize(), orderParameters.getPrice());
 
-        final SignatureResult signatureResult = signMessage(orderMessage, publicAccAddress, privateAccAddress);
+        final SignatureResult signatureResult = signMessage(orderMessage, publicAccountAddress, privateAccountAddress);
         return signatureResult.signature;
     }
 

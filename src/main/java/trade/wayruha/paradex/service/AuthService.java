@@ -10,30 +10,24 @@ public class AuthService extends ServiceBase {
     final Long DAY_IN_SEC = (long) (24 * 60 * 60);
 
     private final AuthEndpoints authApi;
+    private final AuthRequestBuilder authRequestBuilder;
 
     public AuthService(ParadexConfig config) {
         super(config);
         this.authApi = createService(AuthEndpoints.class);
+        this.authRequestBuilder = new AuthRequestBuilder(config.getPrivateKey(), config.getPublicKey(), config.getChainId());
     }
 
     /**
      * Authenticate with Paradex API.
      * @return AuthResponse containing JWT authentication token
      */
-    public AuthResponse authenticate(AuthRequest authRequest) {
-        return client.executeSync(authApi.authenticate(authRequest.getAccount(),
-                authRequest.getSignature(),
-                authRequest.getTimestamp(),
-                authRequest.getSignatureExpiration()));
-    }
-
     public AuthResponse authenticate(){
        return authenticate(DAY_IN_SEC);
     }
 
     public AuthResponse authenticate(long validityPeriodSec){
-        final ParadexConfig config = client.getConfig();
-        final AuthRequest authRequest = AuthRequestBuilder.buildRequest(config.getPublicKey(), config.getPrivateKey(), config.getChainId(), validityPeriodSec);
+        final AuthRequest authRequest = authRequestBuilder.buildRequest(validityPeriodSec);
         return client.executeSync(authApi.authenticate(authRequest.getAccount(),
                 authRequest.getSignature(),
                 authRequest.getTimestamp(),
