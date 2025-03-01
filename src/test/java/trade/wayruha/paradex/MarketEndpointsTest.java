@@ -25,4 +25,8 @@ public class MarketEndpointsTest {
     private static void testOneMarketSummary(){
         System.out.println(marketService.getMarketSummary(MARKET_PAIR));
     }
+
+    private static void testGetMarketsStaticData() { System.out.println(marketService.getMarketsStaticData()); }
+
+    private static void testGetOneMarketStaticData() { System.out.println(marketService.getMarketsStaticData(MARKET_PAIR)); }
 }

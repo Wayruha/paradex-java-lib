@@ -3,6 +3,7 @@ package trade.wayruha.paradex.service;
 import trade.wayruha.paradex.ParadexConfig;
 import trade.wayruha.paradex.dto.response.MarketBboResponse;
 import trade.wayruha.paradex.dto.response.MarketSummaryResponse;
+import trade.wayruha.paradex.dto.response.MarketsStaticDataResponse;
 import trade.wayruha.paradex.service.endpoint.MarketEndpoints;
 
 public class MarketService extends ServiceBase{
@@ -38,5 +39,16 @@ public class MarketService extends ServiceBase{
      */
     public MarketSummaryResponse getMarketSummary(String market){
         return client.executeSync(marketApi.marketSummary(market));
+    }
+
+    public MarketsStaticDataResponse getMarketsStaticData() {
+        return client.executeSync(marketApi.marketsStaticData());
+    }
+
+    /**
+     * @param market e.g. BTC-USD-PERP
+     */
+    public MarketsStaticDataResponse getMarketsStaticData(String market) {
+        return client.executeSync(marketApi.marketsStaticData(market));
     }
 }
