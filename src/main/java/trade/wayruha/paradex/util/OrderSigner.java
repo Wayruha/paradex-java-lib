@@ -33,8 +33,8 @@ public class OrderSigner {
      * @param chainId in full format e.g. PRIVATE_SN_POTC_SEPOLIA
      */
     private static String createOrderMessage(String chainId, long timestamp, String market, OrderSide side, OrderType orderType, BigDecimal size, BigDecimal price) {
-        int chainSide = (side == OrderSide.Buy) ? 1 : 2;
-        BigDecimal chainPrice = (orderType == OrderType.Market) ? BigDecimal.ZERO : price.scaleByPowerOfTen(8);
+        int chainSide = (side == OrderSide.BUY) ? 1 : 2;
+        BigDecimal chainPrice = (orderType == OrderType.MARKET) ? BigDecimal.ZERO : price.scaleByPowerOfTen(8);
         BigDecimal chainSize = size.scaleByPowerOfTen(8);
         String chainIdHex = Felt.fromShortString(chainId).hexString();
 

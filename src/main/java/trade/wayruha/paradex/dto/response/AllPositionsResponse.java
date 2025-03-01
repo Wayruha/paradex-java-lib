@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class AllPositionsResponse {
     @JsonProperty("results")
-    private List<PositionDetailsResponse> orders;
+    private List<PositionDetailsResponse> positions;
 }

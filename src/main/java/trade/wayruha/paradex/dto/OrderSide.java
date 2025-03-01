@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum OrderSide {
-    Buy("BUY", "1"),
-    Sell("SELL", "2");
+    BUY("BUY", "1"),
+    SELL("SELL", "2");
 
     @JsonValue
     private final String name;

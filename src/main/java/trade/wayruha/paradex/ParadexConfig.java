@@ -31,6 +31,11 @@ public class ParadexConfig {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
     }
+    public ParadexConfig(String publicKey, String privateKey, boolean isMainnet) {
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
+        host = isMainnet ? MAINNET_HOST : TESTNET_HOST;
+    }
 
     /**
      * Host connection timeout.

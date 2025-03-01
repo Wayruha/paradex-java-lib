@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum SelfTradePrevention {
-    ExpireMaker("EXPIRE_MAKER"),
-    ExpireTaker("EXPIRE_TAKER"),
-    ExpireBoth("EXPIRE_BOTH");
+    EXPIRE_MAKER("EXPIRE_MAKER"),
+    EXPIRE_TAKER("EXPIRE_TAKER"),
+    EXPIRE_BOTH("EXPIRE_BOTH");
 
     @Getter
     @JsonValue

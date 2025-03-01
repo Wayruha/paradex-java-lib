@@ -13,8 +13,7 @@ public class HttpClientBuilder {
 
   public HttpClientBuilder(final ParadexConfig config) {
     this.config = config;
-    final HttpLoggingInterceptor logInterceptor = getDefaultLoggingInterceptor();
-    this.loggingInterceptor = logInterceptor;
+    this.loggingInterceptor = getDefaultLoggingInterceptor();
   }
 
   public HttpClientBuilder(final ParadexConfig config, HttpLoggingInterceptor loggingInterceptor) {
@@ -29,9 +28,7 @@ public class HttpClientBuilder {
         .writeTimeout(this.config.getHttpWriteTimeout(), TimeUnit.MILLISECONDS)
         .retryOnConnectionFailure(this.config.isRetryOnConnectionFailure());
 
-    if (config.getJwtToken() != null && !config.getJwtToken().isEmpty()) {
-      clientBuilder.addInterceptor(new JwtInterceptor(config.getJwtToken()));
-    }
+    clientBuilder.addInterceptor(new JwtInterceptor(config));
 
     if (this.config.isHttpLogRequestData() && loggingInterceptor != null) {
       clientBuilder.addInterceptor(loggingInterceptor);

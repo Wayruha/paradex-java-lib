@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum OrderStatus {
-    New("NEW"),
-    Untriggered("UNTRIGGERED"),
-    Open("OPEN"),
-    Closed("CLOSED");
+    NEW("NEW"),
+    UNTRIGGERED("UNTRIGGERED"),
+    OPEN("OPEN"),
+    CLOSED("CLOSED");
 
-    @Getter
     @JsonValue
     private final String name;
 }

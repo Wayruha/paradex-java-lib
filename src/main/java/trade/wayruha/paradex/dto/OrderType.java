@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum OrderType {
-    Market("MARKET"),
-    Limit("LIMIT"),
-    StopLimit("STOP_LIMIT"),
-    StopMarket("STOP_MARKET"),
-    TakeProfitLimit("TAKE_PROFIT_LIMIT"),
-    TakeProfitMarket("TAKE_PROFIT_MARKET"),
-    StopLossMarket("STOP_LOSS_MARKET"),
-    StopLossLimit("STOP_LOSS_LIMIT");
+    MARKET("MARKET"),
+    LIMIT("LIMIT"),
+    STOP_LIMIT("STOP_LIMIT"),
+    STOP_MARKET("STOP_MARKET"),
+    TAKE_PROFIT_LIMIT("TAKE_PROFIT_LIMIT"),
+    TAKE_PROFIT_MARKET("TAKE_PROFIT_MARKET"),
+    STOP_LOSS_MARKET("STOP_LOSS_MARKET"),
+    STOP_LOSS_LIMIT("STOP_LOSS_LIMIT");
 
-    @Getter
     @JsonValue
     private final String name;
 }

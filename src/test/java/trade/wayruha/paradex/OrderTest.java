@@ -50,32 +50,32 @@ public class OrderTest {
 
     private static void testCreateMarketOrder() {
         OrderParameters orderParameters = new OrderParameters(
-                TimeInForce.Gtc,
+                TimeInForce.GTC,
                 "ETH-USD-PERP",
                 null,
-                OrderSide.Buy,
-                OrderType.Market,
+                OrderSide.BUY,
+                OrderType.MARKET,
                 new BigDecimal("1"),
                 "123",
                 List.of(OrderFlag.REDUCE_ONLY),
-                SelfTradePrevention.ExpireTaker,
+                SelfTradePrevention.EXPIRE_TAKER,
                 null);
-        System.out.println(orderService.createOrder(orderParameters));
+        System.out.println(orderService.placeOrder(orderParameters));
     }
 
     private static void testCreateLimitOrder() {
         OrderParameters orderParameters = new OrderParameters(
-                TimeInForce.Gtc.Gtc,
+                TimeInForce.GTC.GTC,
                 "ETH-USD-PERP",
                 new BigDecimal("100000"),
-                OrderSide.Sell,
-                OrderType.Limit,
+                OrderSide.SELL,
+                OrderType.LIMIT,
                 new BigDecimal("1"),
                 "123",
                 List.of(OrderFlag.REDUCE_ONLY),
-                SelfTradePrevention.ExpireTaker,
+                SelfTradePrevention.EXPIRE_TAKER,
                 null);
-        System.out.println(orderService.createOrder(orderParameters));
+        System.out.println(orderService.placeOrder(orderParameters));
     }
 
     private static void testGetOrderDetailsByOrderId(String orderId) {
@@ -85,7 +85,7 @@ public class OrderTest {
 
     private static void testGetAllPositions() {
         AllPositionsResponse allPositions = orderService.getAllPositions();
-        allPositions.getOrders().forEach(System.out::println);
+        allPositions.getPositions().forEach(System.out::println);
     }
 
     private static void testGetOrdersHistory() {
@@ -95,10 +95,10 @@ public class OrderTest {
                 null,
                 null,
                 null,
-                OrderSide.Buy,
+                OrderSide.BUY,
                 null,
-                OrderStatus.Closed,
-                OrderType.Market
+                OrderStatus.CLOSED,
+                OrderType.MARKET
         );
         OrderHistoryResponse ordersHistory = orderService.getOrdersHistory(params);
         ordersHistory.getOrders().forEach(System.out::println);

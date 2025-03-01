@@ -40,7 +40,7 @@ public class OrderService extends ServiceBase {
         client.executeSync(orderApi.cancelOrderById(orderId));
     }
 
-    public OrderDetailsResponse createOrder(OrderParameters orderParameters) {
+    public OrderDetailsResponse placeOrder(OrderParameters orderParameters) {
         final OrderCreateRequest orderCreateRequest = buildOrder(orderParameters);
         return client.executeSync(orderApi.createOrder(orderCreateRequest));
     }

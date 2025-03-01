@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum PositionSide {
-    Short("SHORT"),
-    Long("LONG");
+    SHORT("SHORT"),
+    LONG("LONG");
 
-    @Getter
     @JsonValue
     private final String name;
 }

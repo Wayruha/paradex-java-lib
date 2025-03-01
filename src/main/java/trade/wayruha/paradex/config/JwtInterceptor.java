@@ -3,6 +3,7 @@ package trade.wayruha.paradex.config;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+import trade.wayruha.paradex.ParadexConfig;
 
 import java.io.IOException;
 
@@ -13,10 +14,10 @@ import java.io.IOException;
 // в результаті на момент ДО того як ми авторизуємося цей токен буде налл, а потім ми його підставимо.
 // Але це нашвидкоруч придумане рішення, можливо є кращі підходи
 public class JwtInterceptor implements Interceptor {
-    private final String token;
+    private final ParadexConfig config;
 
-    public JwtInterceptor(String token) {
-        this.token = token;
+    public JwtInterceptor(ParadexConfig config) {
+        this.config = config;
     }
 
     @Override
@@ -25,8 +26,8 @@ public class JwtInterceptor implements Interceptor {
 
         // Add Authorization header if the token is available
         Request.Builder requestBuilder = originalRequest.newBuilder();
-        if (token != null && !token.isEmpty()) {
-            requestBuilder.addHeader("Authorization", "Bearer " + token);
+        if (config.getJwtToken() != null && !config.getJwtToken().isEmpty()) {
+            requestBuilder.addHeader("Authorization", "Bearer " + config.getJwtToken());
         }
 
         return chain.proceed(requestBuilder.build());
