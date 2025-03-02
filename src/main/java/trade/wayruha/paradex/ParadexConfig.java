@@ -21,20 +21,21 @@ public class ParadexConfig {
     public static final String TESTNET_WS_HOST = "wss://ws.api.testnet.paradex.trade/v1";
     public static final String MAINNET_WS_HOST = "wss://ws.api.prod.paradex.trade/v1";
 
-    private String host = TESTNET_HOST; // https://api.testnet.paradex.trade/v1 - testnet
-    private String webSocketHost = "wss://ws.api.prod.paradex.trade/v1"; // replace with the actual WebSocket host
-    private String privateKey = ""; // can be found on paradex page
-    private String publicKey = ""; // can be found on paradex page
+    private String host;
+    private String webSocketHost;
+    private String privateKey;
+    private String publicKey;
     private String jwtToken;
 
     public ParadexConfig(String publicKey, String privateKey) {
-        this.publicKey = publicKey;
-        this.privateKey = privateKey;
+        this(publicKey, privateKey, true);
     }
+
     public ParadexConfig(String publicKey, String privateKey, boolean isMainnet) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
-        host = isMainnet ? MAINNET_HOST : TESTNET_HOST;
+        this.host = isMainnet ? MAINNET_HOST : TESTNET_HOST;
+        this.webSocketHost = isMainnet ? MAINNET_WS_HOST : TESTNET_WS_HOST;
     }
 
     /**
@@ -82,11 +83,6 @@ public class ParadexConfig {
     public String getChainId() {
         Objects.requireNonNull(host);
         return TESTNET_HOST.equalsIgnoreCase(host) ? "PRIVATE_SN_POTC_SEPOLIA" : "PRIVATE_SN_PARACLEAR_MAINNET";
-    }
-
-    public String getWebSocketHost() {
-        Objects.requireNonNull(host);
-        return TESTNET_HOST.equalsIgnoreCase(host) ? TESTNET_WS_HOST : MAINNET_HOST;
     }
 
     private static ObjectMapper createObjectMapper() {

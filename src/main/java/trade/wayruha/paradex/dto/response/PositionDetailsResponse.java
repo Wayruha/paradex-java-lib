@@ -33,11 +33,11 @@ public class PositionDetailsResponse {
     private String id;
 
     @JsonProperty("last_fill_id")
-    private BigDecimal lastFillId;
+    private String lastFillId;
 
     @JsonProperty("last_updated_at")
     private Long lastUpdatedAt;
-    private BigDecimal leverage;
+    private double leverage;
 
     @JsonProperty("liquidation_price")
     private BigDecimal liquidationPrice;
