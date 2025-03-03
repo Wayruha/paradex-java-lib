@@ -16,6 +16,7 @@ public class OrderTest {
     private static OrderService orderService;
     private static AuthService authService;
     private static final String CANCEL_ORDER_ID = "1739663638290201703994530000";
+    private static final String CANCEL_CLIENT_ORDER_ID = "1741023334337";
 
     public static void main(String[] args) {
         final ParadexConfig config = new ParadexConfig();
@@ -33,6 +34,7 @@ public class OrderTest {
         testCreateMarketOrder();
         testCreateLimitOrder();
         testCancelOrderById(CANCEL_ORDER_ID);
+        testCancelOrderByClientId(CANCEL_CLIENT_ORDER_ID);
         testGetOrderDetailsByOrderId("1739635538240201703942180000");
         testGetAllPositions();
         testGetOrdersHistory();
@@ -46,6 +48,10 @@ public class OrderTest {
 
     private static void testCancelOrderById(String orderId) {
         orderService.cancelOrderById(orderId);
+    }
+
+    private static void testCancelOrderByClientId(String clientId) {
+        orderService.cancelOrderByClientId(clientId);
     }
 
     private static void testCreateMarketOrder() {
@@ -65,7 +71,7 @@ public class OrderTest {
 
     private static void testCreateLimitOrder() {
         OrderParameters orderParameters = new OrderParameters(
-                TimeInForce.GTC.GTC,
+                TimeInForce.GTC,
                 "ETH-USD-PERP",
                 new BigDecimal("100000"),
                 OrderSide.SELL,

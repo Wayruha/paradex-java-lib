@@ -27,6 +27,9 @@ public interface OrderEndpoints {
     @DELETE("orders/{order_id}")
     Call<Void> cancelOrderById(@Path("order_id") String orderId);
 
+    @DELETE("orders/by_client_id/{client_id}")
+    Call<Void> cancelOrderByClientId(@Path("client_id") String clientId);
+
     @GET("orders-history")
     Call<OrderHistoryResponse> getOrdersHistory(@QueryMap Map<String, String> queryParams);
 
