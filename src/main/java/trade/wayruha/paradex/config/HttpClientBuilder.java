@@ -1,5 +1,6 @@
 package trade.wayruha.paradex.config;
 
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +24,10 @@ public class HttpClientBuilder {
 
   public OkHttpClient buildClient() {
     final OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+    final ConnectionPool connectionPool = new ConnectionPool(2, 5, TimeUnit.MINUTES);
+
     clientBuilder.connectTimeout(this.config.getHttpConnectTimeout(), TimeUnit.MILLISECONDS)
+        .connectionPool(connectionPool)
         .readTimeout(this.config.getHttpReadTimeout(), TimeUnit.MILLISECONDS)
         .writeTimeout(this.config.getHttpWriteTimeout(), TimeUnit.MILLISECONDS)
         .retryOnConnectionFailure(this.config.isRetryOnConnectionFailure());
