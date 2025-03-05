@@ -17,7 +17,7 @@ import static trade.wayruha.paradex.config.Constant.HTTP_CLIENT_TIMEOUT_MS;
 @NoArgsConstructor
 public class ParadexConfig {
     public static final String TESTNET_HOST = "https://api.testnet.paradex.trade/v1/";
-    public static final String MAINNET_HOST = "https://api.prod.paradex.trade/v1";
+    public static final String MAINNET_HOST = "https://api.prod.paradex.trade/v1/";
     public static final String TESTNET_WS_HOST = "wss://ws.api.testnet.paradex.trade/v1";
     public static final String MAINNET_WS_HOST = "wss://ws.api.prod.paradex.trade/v1";
 
