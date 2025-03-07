@@ -38,6 +38,11 @@ public class ParadexConfig {
         this.webSocketHost = isMainnet ? MAINNET_WS_HOST : TESTNET_WS_HOST;
     }
 
+    public ParadexConfig(boolean isMainnet) {
+        this.host = isMainnet ? MAINNET_HOST : TESTNET_HOST;
+        this.webSocketHost = isMainnet ? MAINNET_WS_HOST : TESTNET_WS_HOST;
+    }
+
     /**
      * Host connection timeout.
      */
