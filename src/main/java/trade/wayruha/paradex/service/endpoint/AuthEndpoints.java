@@ -1,8 +1,10 @@
 package trade.wayruha.paradex.service.endpoint;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import trade.wayruha.paradex.dto.request.OnboardRequest;
 import trade.wayruha.paradex.dto.response.AuthResponse;
 
 public interface AuthEndpoints {
@@ -13,5 +15,13 @@ public interface AuthEndpoints {
             @Header("PARADEX-STARKNET-SIGNATURE") String signature,
             @Header("PARADEX-TIMESTAMP") String timestamp,
             @Header("PARADEX-SIGNATURE-EXPIRATION") String expiration
+    );
+
+    @POST("onboarding")
+    Call<Void> onboard(
+            @Header("PARADEX-ETHEREUM-ACCOUNT") String ethAccount,
+            @Header("PARADEX-STARKNET-ACCOUNT") String starknetAccount,
+            @Header("PARADEX-STARKNET-SIGNATURE") String signature,
+            @Body OnboardRequest onboardRequest
     );
 }

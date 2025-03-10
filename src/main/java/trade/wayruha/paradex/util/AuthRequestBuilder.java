@@ -4,21 +4,24 @@ import com.swmansion.starknet.data.TypedData;
 import com.swmansion.starknet.data.types.Felt;
 import com.swmansion.starknet.signer.StarkCurveSigner;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import trade.wayruha.paradex.dto.request.AuthRequest;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Value
 @RequiredArgsConstructor
 public class AuthRequestBuilder {
 
-    private final String privateKey;
-    private final String publicKey;
-    private final String chainId;
+    String privateKey;
+    String publicKey;
+    String chainId;
 
     /**
      * Builds AuthRequest previously creating authentication signature
+     *
      * @param expiryDurationSeconds lifetime of returned JWT token in seconds
      */
     public AuthRequest buildRequest(Long expiryDurationSeconds) {
@@ -57,6 +60,48 @@ public class AuthRequestBuilder {
                 .map(BigInteger::toString)
                 .map(s -> "\"" + s + "\"") // Wrap each number in double quotes
                 .collect(Collectors.joining(",", "[", "]")); // Keep brackets for a tuple-like format
+    }
+
+    public String signOnboardingMessage(String privateKey) {
+        final Felt accountAddress = Felt.fromHex(publicKey);
+        final Felt privateKeyFelt = Felt.fromHex(privateKey);
+        final String chainIdHex = Felt.fromShortString(chainId).hexString();
+        final String onboardingMessage = String.format(
+                """
+                        {
+                            "message": {
+                                "action": "Onboarding"
+                            },
+                            "domain": {"name": "Paradex", "chainId": "%s", "version": "1"},
+                            "primaryType": "Constant",
+                            "types": {
+                                "StarkNetDomain": [
+                                    {"name": "name", "type": "felt"},
+                                    {"name": "chainId", "type": "felt"},
+                                    {"name": "version", "type": "felt"}
+                                ],
+                                "Constant": [
+                                    {"name": "action", "type": "felt"}
+                                ]
+                            }
+                        }
+                        """,
+                chainIdHex
+        );
+
+        final TypedData typedData = TypedData.fromJsonString(onboardingMessage);
+
+        // Create new StarkCurveSigner with the private key
+        final StarkCurveSigner scSigner = new StarkCurveSigner(privateKeyFelt);
+
+        // Sign the typed data
+        final List<Felt> signature = scSigner.signTypedData(typedData, accountAddress);
+
+        // Convert the signature to a string
+        final List<BigInteger> signatureBigInt = signature.stream()
+                .map(Felt::getValue)
+                .collect(Collectors.toList());
+        return convertBigIntListToSignatureString(signatureBigInt);
     }
 
     private static String createAuthMessage(long timestamp, long expiration, String chainIdHex) {

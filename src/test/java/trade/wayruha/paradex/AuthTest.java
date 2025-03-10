@@ -11,7 +11,21 @@ public class AuthTest {
         final ParadexConfig config = new ParadexConfig(true);
         authService = new AuthService(config);
 
+        authenticate();
+        onboard();
+    }
+
+
+    public static void authenticate() {
         AuthResponse response = authService.authenticate();
         System.out.println(response);
+    }
+
+    public static void onboard() {
+        authService.onboard("",
+                "",
+                "",
+                "",
+                null);
     }
 }
