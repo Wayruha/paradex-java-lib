@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import trade.wayruha.paradex.util.BigDecimalSerializer;
 
 import java.math.BigDecimal;
@@ -14,7 +13,6 @@ import java.util.Objects;
 import static trade.wayruha.paradex.config.Constant.HTTP_CLIENT_TIMEOUT_MS;
 
 @Data
-@NoArgsConstructor
 public class ParadexConfig {
     public static final String TESTNET_HOST = "https://api.testnet.paradex.trade/v1/";
     public static final String MAINNET_HOST = "https://api.prod.paradex.trade/v1/";
@@ -32,10 +30,9 @@ public class ParadexConfig {
     }
 
     public ParadexConfig(String publicKey, String privateKey, boolean isMainnet) {
+        this(isMainnet);
         this.publicKey = publicKey;
         this.privateKey = privateKey;
-        this.host = isMainnet ? MAINNET_HOST : TESTNET_HOST;
-        this.webSocketHost = isMainnet ? MAINNET_WS_HOST : TESTNET_WS_HOST;
     }
 
     public ParadexConfig(boolean isMainnet) {

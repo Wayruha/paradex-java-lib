@@ -7,7 +7,7 @@ public class MarketEndpointsTest {
     private final static String MARKET_PAIR = "BTC-USD-PERP";
     private static MarketService marketService;
     public static void main(String[] args) {
-        final ParadexConfig config = new ParadexConfig();
+        final ParadexConfig config = new ParadexConfig(true);
         marketService = new MarketService(config);
         testGetMarketBbo();
         testMarketSummary();

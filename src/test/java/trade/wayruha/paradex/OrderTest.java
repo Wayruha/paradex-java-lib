@@ -19,7 +19,7 @@ public class OrderTest {
     private static final String CANCEL_CLIENT_ORDER_ID = "1741023334337";
 
     public static void main(String[] args) {
-        final ParadexConfig config = new ParadexConfig();
+        final ParadexConfig config = new ParadexConfig(true);
         config.setPublicKey(TestUtils.PUBLIC_KEY);
         config.setPrivateKey(TestUtils.PRIVATE_KEY);
         authService = new AuthService(config);

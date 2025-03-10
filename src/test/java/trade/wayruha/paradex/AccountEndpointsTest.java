@@ -12,7 +12,7 @@ public class AccountEndpointsTest {
     private static AuthService authService;
 
     public static void main(String[] args) {
-        final ParadexConfig config = new ParadexConfig();
+        final ParadexConfig config = new ParadexConfig(false);
 
         config.setPublicKey(PUBLIC_KEY);
         config.setPrivateKey(PRIVATE_KEY);
