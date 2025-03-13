@@ -5,11 +5,14 @@ import lombok.Setter;
 import trade.wayruha.paradex.ParadexConfig;
 import trade.wayruha.paradex.dto.response.OrderDetailsResponse;
 import trade.wayruha.paradex.dto.wsrequest.Auth;
+import trade.wayruha.paradex.dto.wsrequest.Subscription;
 import trade.wayruha.paradex.dto.wsrequest.WSRequest;
 import trade.wayruha.paradex.dto.wsresponse.OrderBookUpdate;
-import trade.wayruha.paradex.dto.wsrequest.Subscription;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class WebSocketClientFactory {
@@ -42,7 +45,7 @@ public class WebSocketClientFactory {
         return client;
     }
 
-    private static Subscription buildOrderBookSubscription(String marketSymbol){
+    private static Subscription buildOrderBookSubscription(String marketSymbol) {
         final String subscriptionStr = String.format("order_book.%s.snapshot@15@100ms", marketSymbol);
         return new Subscription(subscriptionStr);
     }

@@ -53,6 +53,7 @@ public class WebSocketClient<T> {
     @SneakyThrows
     public void connect(List<WSRequest> subscriptions) {
         try {
+            log.debug("{} Connecting to: {}", logPrefix, subscriptions);
             initializeConnection();
             if (subscriptions != null) {
                 this.subscriptions = new ArrayList<>(subscriptions);
@@ -191,7 +192,7 @@ public class WebSocketClient<T> {
 
         @Override
         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) {
-            log.debug("{} onOpen WS event. Connecting to: {}", logPrefix, subscriptions);
+            log.debug("{} onOpen WS event.", logPrefix);
             lastReceivedTime = System.currentTimeMillis();
             callback.onOpen(null);
         }
