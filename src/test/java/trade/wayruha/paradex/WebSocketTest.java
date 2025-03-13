@@ -13,7 +13,7 @@ import static trade.wayruha.paradex.TestUtils.PUBLIC_KEY;
 public class WebSocketTest {
     static final TypeReference<OrderBookUpdate> ORDER_BOOK_TYPE = new TypeReference<>() {};
 
-    static final ParadexConfig config = new ParadexConfig(PUBLIC_KEY, null);
+    static final ParadexConfig config = new ParadexConfig(null, null, PUBLIC_KEY, null);
     static final trade.wayruha.paradex.websocket.WebSocketClientFactory factory = new WebSocketClientFactory(config);
 
     @SneakyThrows

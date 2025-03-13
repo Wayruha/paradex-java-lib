@@ -19,8 +19,8 @@ public class OrderService extends ServiceBase {
     public OrderService(ParadexConfig config) {
         super(config);
         this.orderApi = createService(OrderEndpoints.class);
-        final Felt privateAddress = Felt.fromHex(config.getPrivateKey());
-        final Felt accountAddress = Felt.fromHex(config.getPublicKey());
+        final Felt privateAddress = Felt.fromHex(config.getStarknetPrivateKey());
+        final Felt accountAddress = Felt.fromHex(config.getStarknetPublicKey());
         this.orderSigner = new OrderSigner(config.getChainId(), accountAddress, privateAddress);
     }
 

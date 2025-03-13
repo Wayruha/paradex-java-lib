@@ -18,10 +18,11 @@ public class OrderTest {
     private static final String CANCEL_ORDER_ID = "1739663638290201703994530000";
     private static final String CANCEL_CLIENT_ORDER_ID = "1741023334337";
 
+    //todo fix test
     public static void main(String[] args) {
-        final ParadexConfig config = new ParadexConfig(true);
-        config.setPublicKey(TestUtils.PUBLIC_KEY);
-        config.setPrivateKey(TestUtils.PRIVATE_KEY);
+        final ParadexConfig config = new ParadexConfig(false);
+        config.setStarknetPublicKey(TestUtils.PUBLIC_KEY);
+        config.setStarknetPrivateKey(TestUtils.PRIVATE_KEY);
         authService = new AuthService(config);
 
         AuthResponse response = authService.authenticate();

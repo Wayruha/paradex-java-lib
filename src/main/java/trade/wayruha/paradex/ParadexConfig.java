@@ -12,6 +12,12 @@ import java.util.Objects;
 
 import static trade.wayruha.paradex.config.Constant.HTTP_CLIENT_TIMEOUT_MS;
 
+/**
+ * * @param ethAccount ETH wallet used to sign in to Paradex UI
+ * * @param starknetAccount can be found on Paradex ui as "Paradex Account"
+ * * @param starknetPrivateKey This is available directly in Paradex. PLEASE NEVER SHARE THIS WITH ANYONE EVEN IF THEY SAY THEY WORK FOR PARADEX
+ * * @param starknetPublicKey To find this value go to https://voyager.prod.paradex.trade/, search for your Paradex Account, and under Contract data choose the getSigner function from Read Contract
+ */
 @Data
 public class ParadexConfig {
     public static final String TESTNET_HOST = "https://api.testnet.paradex.trade/v1/";
@@ -21,24 +27,31 @@ public class ParadexConfig {
 
     private String host;
     private String webSocketHost;
-    private String privateKey;
-    private String publicKey;
+
+    private String ethAddress;
+    private String paradexAddress;
+    private String starknetPublicKey;
+    private String starknetPrivateKey;
+
     private String jwtToken;
 
-    public ParadexConfig(String publicKey, String privateKey) {
-        this(publicKey, privateKey, true);
+    public ParadexConfig(String ethAddress, String paradexAddress, String starknetPublicKey, String starknetPrivateKey) {
+        this(ethAddress, paradexAddress, starknetPublicKey, starknetPrivateKey, true);
     }
 
-    public ParadexConfig(String publicKey, String privateKey, boolean isMainnet) {
+    public ParadexConfig(String ethAddress, String paradexAddress, String starknetPublicKey, String starknetPrivateKey, boolean isMainnet) {
         this(isMainnet);
-        this.publicKey = publicKey;
-        this.privateKey = privateKey;
+        this.ethAddress = ethAddress;
+        this.paradexAddress = paradexAddress;
+        this.starknetPublicKey = starknetPublicKey;
+        this.starknetPrivateKey = starknetPrivateKey;
     }
 
     public ParadexConfig(boolean isMainnet) {
         this.host = isMainnet ? MAINNET_HOST : TESTNET_HOST;
         this.webSocketHost = isMainnet ? MAINNET_WS_HOST : TESTNET_WS_HOST;
     }
+
 
     /**
      * Host connection timeout.

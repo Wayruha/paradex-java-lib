@@ -9,10 +9,14 @@ public class AuthTest {
 
     public static void main(String[] args) {
         final ParadexConfig config = new ParadexConfig(true);
+        config.setEthAddress("");
+        config.setParadexAddress("");
+        config.setStarknetPublicKey("");
+        config.setStarknetPrivateKey("");
         authService = new AuthService(config);
 
-        authenticate();
         onboard();
+        authenticate();
     }
 
 
@@ -22,10 +26,6 @@ public class AuthTest {
     }
 
     public static void onboard() {
-        authService.onboard("",
-                "",
-                "",
-                "",
-                null);
+        authService.onboard("");
     }
 }

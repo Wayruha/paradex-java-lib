@@ -14,8 +14,8 @@ public class AccountEndpointsTest {
     public static void main(String[] args) {
         final ParadexConfig config = new ParadexConfig(false);
 
-        config.setPublicKey(PUBLIC_KEY);
-        config.setPrivateKey(PRIVATE_KEY);
+        config.setStarknetPublicKey(PUBLIC_KEY);
+        config.setStarknetPrivateKey(PRIVATE_KEY);
         authService = new AuthService(config);
 
         AuthResponse response = authService.authenticate();

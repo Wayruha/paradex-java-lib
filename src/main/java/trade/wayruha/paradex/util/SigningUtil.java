@@ -3,30 +3,23 @@ package trade.wayruha.paradex.util;
 import com.swmansion.starknet.data.TypedData;
 import com.swmansion.starknet.data.types.Felt;
 import com.swmansion.starknet.signer.StarkCurveSigner;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import lombok.experimental.UtilityClass;
 import trade.wayruha.paradex.dto.request.AuthRequest;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Value
-@RequiredArgsConstructor
-public class AuthRequestBuilder {
-
-    String privateKey;
-    String publicKey;
-    String chainId;
+@UtilityClass
+public class SigningUtil {
 
     /**
      * Builds AuthRequest previously creating authentication signature
-     *
      * @param expiryDurationSeconds lifetime of returned JWT token in seconds
      */
-    public AuthRequest buildRequest(Long expiryDurationSeconds) {
-        final Felt accountAddress = Felt.fromHex(publicKey);
-        final Felt privateKeyFelt = Felt.fromHex(privateKey);
+    public static AuthRequest buildRequest(String paradexAddress, String starknetPrivateKey, String chainId, Long expiryDurationSeconds) {
+        final Felt accountAddress = Felt.fromHex(paradexAddress);
+        final Felt privateKeyFelt = Felt.fromHex(starknetPrivateKey);
 
         // Get current timestamp in seconds
         final long timestamp = System.currentTimeMillis() / 1000;
@@ -52,7 +45,7 @@ public class AuthRequestBuilder {
                 .collect(Collectors.toList());
         final String signatureStr = convertBigIntListToSignatureString(signatureBigInt);
 
-        return new AuthRequest(publicKey, signatureStr, Long.toString(timestamp), Long.toString(expiry));
+        return new AuthRequest(paradexAddress, signatureStr, Long.toString(timestamp), Long.toString(expiry));
     }
 
     private static String convertBigIntListToSignatureString(List<BigInteger> list) {
@@ -62,9 +55,9 @@ public class AuthRequestBuilder {
                 .collect(Collectors.joining(",", "[", "]")); // Keep brackets for a tuple-like format
     }
 
-    public String signOnboardingMessage(String privateKey) {
-        final Felt accountAddress = Felt.fromHex(publicKey);
-        final Felt privateKeyFelt = Felt.fromHex(privateKey);
+    public static String signOnboardingMessage(String paradexAddress, String starknetPrivateKey, String chainId) {
+        final Felt accountAddress = Felt.fromHex(paradexAddress);
+        final Felt privateKeyFelt = Felt.fromHex(starknetPrivateKey);
         final String chainIdHex = Felt.fromShortString(chainId).hexString();
         final String onboardingMessage = String.format(
                 """
