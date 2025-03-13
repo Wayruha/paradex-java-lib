@@ -126,7 +126,7 @@ public class WebSocketClient<T> {
 
     private void handleMessage(String message) {
         lastReceivedTime = System.currentTimeMillis();
-        log.debug("{} onMessage WS event: {}", logPrefix, message);
+        log.trace("{} onMessage WS event: {}", logPrefix, message);
         try {
             T data = parseResponseBody(message);
             if (data != null) callback.onResponse(data);

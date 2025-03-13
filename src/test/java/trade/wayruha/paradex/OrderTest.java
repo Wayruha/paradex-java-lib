@@ -10,6 +10,8 @@ import trade.wayruha.paradex.service.OrderService;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static trade.wayruha.paradex.TestUtils.*;
+
 
 public class OrderTest {
 
@@ -18,11 +20,8 @@ public class OrderTest {
     private static final String CANCEL_ORDER_ID = "1739663638290201703994530000";
     private static final String CANCEL_CLIENT_ORDER_ID = "1741023334337";
 
-    //todo fix test
     public static void main(String[] args) {
-        final ParadexConfig config = new ParadexConfig(false);
-        config.setStarknetPublicKey(TestUtils.PUBLIC_KEY);
-        config.setStarknetPrivateKey(TestUtils.PRIVATE_KEY);
+        final ParadexConfig config = new ParadexConfig(ETH_ADDRESS, PARADEX_ADDRESS, PUBLIC_KEY, PRIVATE_KEY,false);
         authService = new AuthService(config);
 
         AuthResponse response = authService.authenticate();

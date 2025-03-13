@@ -13,8 +13,8 @@ public interface AuthEndpoints {
     Call<AuthResponse> authenticate(
             @Header("PARADEX-STARKNET-ACCOUNT") String account,
             @Header("PARADEX-STARKNET-SIGNATURE") String signature,
-            @Header("PARADEX-TIMESTAMP") String timestamp,
-            @Header("PARADEX-SIGNATURE-EXPIRATION") String expiration
+            @Header("PARADEX-TIMESTAMP") long timestamp,
+            @Header("PARADEX-SIGNATURE-EXPIRATION") long expiration
     );
 
     @POST("onboarding")

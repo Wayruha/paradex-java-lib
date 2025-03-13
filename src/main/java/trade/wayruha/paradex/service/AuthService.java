@@ -1,5 +1,6 @@
 package trade.wayruha.paradex.service;
 
+import com.auth0.jwt.JWT;
 import trade.wayruha.paradex.ParadexConfig;
 import trade.wayruha.paradex.dto.request.AuthRequest;
 import trade.wayruha.paradex.dto.request.OnboardRequest;
@@ -27,10 +28,16 @@ public class AuthService extends ServiceBase {
 
     public AuthResponse authenticate(long validityPeriodSec) {
         final AuthRequest authRequest = SigningUtil.buildRequest(getConfig().getParadexAddress(), getConfig().getStarknetPrivateKey(), getConfig().getChainId(), validityPeriodSec);
-        return client.executeSync(authApi.authenticate(authRequest.getAccount(),
+        final AuthResponse authResponse = client.executeSync(authApi.authenticate(authRequest.getAccount(),
                 authRequest.getSignature(),
                 authRequest.getTimestamp(),
                 authRequest.getSignatureExpiration()));
+        authResponse.setExpireAt(decodeAndGetExpiration(authResponse.getJwtToken()));
+        return authResponse;
+    }
+
+    private long decodeAndGetExpiration(String jwtToken) {
+        return JWT.decode(jwtToken).getExpiresAt().toInstant().getEpochSecond();
     }
 
     /**

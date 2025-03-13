@@ -6,11 +6,13 @@ import trade.wayruha.paradex.dto.response.OrderDetailsResponse;
 import trade.wayruha.paradex.service.AuthService;
 import trade.wayruha.paradex.websocket.WebSocketClientFactory;
 
-//todo fix test
+import static trade.wayruha.paradex.TestUtils.*;
+import static trade.wayruha.paradex.TestUtils.PRIVATE_KEY;
+
 public class PrivateWSTest {
     static final TypeReference<OrderDetailsResponse> ORDER_DETAILS_RESPONSE = new TypeReference<>() {
     };
-    static final ParadexConfig config = new ParadexConfig(null, null, TestUtils.PUBLIC_KEY, TestUtils.PRIVATE_KEY);
+    static final ParadexConfig config = new ParadexConfig(ETH_ADDRESS, PARADEX_ADDRESS, PUBLIC_KEY, PRIVATE_KEY,true);
     static WebSocketClientFactory factory;
     static final AuthService authService = new AuthService(config);
 

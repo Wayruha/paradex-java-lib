@@ -1,13 +1,9 @@
 package trade.wayruha.paradex.dto.request;
 
-import com.swmansion.starknet.data.types.Felt;
 import lombok.Value;
-
-import java.util.List;
 
 /**
  * Represents the authentication request payload for the Paradex API.
- *
  */
 
 @Value
@@ -25,10 +21,10 @@ public class AuthRequest {
     /**
      * The timestamp when the request is made, in EIP-712 format.
      */
-    String timestamp;
+    long timestamp;
 
     /**
      * The expiration timestamp for the signature, ensuring the request is time-bound.
      */
-    String signatureExpiration;
+    long signatureExpiration;
 }

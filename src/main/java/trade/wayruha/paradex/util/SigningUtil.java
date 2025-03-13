@@ -45,7 +45,7 @@ public class SigningUtil {
                 .collect(Collectors.toList());
         final String signatureStr = convertBigIntListToSignatureString(signatureBigInt);
 
-        return new AuthRequest(paradexAddress, signatureStr, Long.toString(timestamp), Long.toString(expiry));
+        return new AuthRequest(paradexAddress, signatureStr, timestamp, expiry);
     }
 
     private static String convertBigIntListToSignatureString(List<BigInteger> list) {
