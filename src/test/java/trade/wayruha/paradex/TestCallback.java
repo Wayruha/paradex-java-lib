@@ -5,14 +5,20 @@ import trade.wayruha.paradex.websocket.WebSocketCallback;
 
 class TestCallback<T> implements WebSocketCallback<T> {
     final TypeReference<T> type;
+    final String prefix;
 
     public TestCallback(TypeReference<T> type) {
+        this(type, "");
+    }
+
+    public TestCallback(TypeReference<T> type, String prefix) {
         this.type = type;
+        this.prefix = prefix;
     }
 
     @Override
     public void onResponse(T response) {
-        System.out.println(response);
+        System.out.println(prefix + ": " + response);
 
     }
 

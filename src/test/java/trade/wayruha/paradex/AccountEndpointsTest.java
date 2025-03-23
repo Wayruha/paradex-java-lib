@@ -11,7 +11,7 @@ public class AccountEndpointsTest {
     private static AuthService authService;
 
     public static void main(String[] args) {
-        final ParadexConfig config = new ParadexConfig(true);
+        final ParadexConfig config = new ParadexConfig(false);
         config.setParadexAddress(ETH_ADDRESS);
         config.setParadexAddress(PARADEX_ADDRESS);
         config.setStarknetPublicKey(PUBLIC_KEY);

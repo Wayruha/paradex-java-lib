@@ -2,6 +2,8 @@ package trade.wayruha.paradex.service;
 
 import com.swmansion.starknet.data.types.Felt;
 import trade.wayruha.paradex.ParadexConfig;
+import trade.wayruha.paradex.dto.OrderSide;
+import trade.wayruha.paradex.dto.OrderType;
 import trade.wayruha.paradex.dto.request.OrderCreateRequest;
 import trade.wayruha.paradex.dto.request.OrderHistoryQueryParams;
 import trade.wayruha.paradex.dto.request.OrderParameters;
@@ -10,18 +12,17 @@ import trade.wayruha.paradex.dto.response.AllPositionsResponse;
 import trade.wayruha.paradex.dto.response.OrderDetailsResponse;
 import trade.wayruha.paradex.dto.response.OrderHistoryResponse;
 import trade.wayruha.paradex.service.endpoint.OrderEndpoints;
-import trade.wayruha.paradex.util.OrderSigner;
+import trade.wayruha.paradex.util.SignatureResult;
+import trade.wayruha.paradex.util.SigningUtil;
+
+import java.math.BigDecimal;
 
 public class OrderService extends ServiceBase {
     private final OrderEndpoints orderApi;
-    private final OrderSigner orderSigner;
 
     public OrderService(ParadexConfig config) {
         super(config);
         this.orderApi = createService(OrderEndpoints.class);
-        final Felt privateAddress = Felt.fromHex(config.getStarknetPrivateKey());
-        final Felt accountAddress = Felt.fromHex(config.getStarknetPublicKey());
-        this.orderSigner = new OrderSigner(config.getChainId(), accountAddress, privateAddress);
     }
 
     public AllOpenOrdersResponse getAllOpenOrders() {
@@ -55,8 +56,10 @@ public class OrderService extends ServiceBase {
 
     public OrderCreateRequest buildOrder(OrderParameters orderParameters) {
         final long timestamp = System.currentTimeMillis();
-        final String signature = orderSigner.sign(orderParameters, timestamp);
-        return new OrderCreateRequest(orderParameters, signature, timestamp, 0);
+        final String orderMessage = createOrderMessage(getConfig().getChainId(), timestamp, orderParameters.getMarket(),
+                orderParameters.getSide(), orderParameters.getType(), orderParameters.getSize(), orderParameters.getPrice());
+        final SignatureResult signature = SigningUtil.signMessage(orderMessage, getConfig().getParadexAddress(), getConfig().getStarknetPrivateKey());
+        return new OrderCreateRequest(orderParameters, signature.signature(), timestamp, 60_000);
     }
 
     /**
@@ -65,5 +68,48 @@ public class OrderService extends ServiceBase {
      */
     public OrderDetailsResponse getOrderByClientOrderId(String clientOrderId) {
         return client.executeSync(orderApi.getActiveOrderByClientOrderId(clientOrderId));
+    }
+
+    /**
+     * @param chainId in full format e.g. PRIVATE_SN_POTC_SEPOLIA
+     */
+    private static String createOrderMessage(String chainId, long timestamp, String market, OrderSide side, OrderType orderType, BigDecimal size, BigDecimal price) {
+        int chainSide = (side == OrderSide.BUY) ? 1 : 2;
+        BigDecimal chainPrice = (orderType == OrderType.MARKET) ? BigDecimal.ZERO : price.scaleByPowerOfTen(8);
+        BigDecimal chainSize = size.scaleByPowerOfTen(8);
+        String chainIdHex = Felt.fromShortString(chainId).hexString();
+
+        return String.format(
+                """
+                        {
+                            "message": {
+                                "timestamp": %d,
+                                "market": "%s",
+                                "side": %d,
+                                "orderType": "%s",
+                                "size": %s,
+                                "price": %s
+                            },
+                            "domain": {"name": "Paradex", "chainId": "%s", "version": "1"},
+                            "primaryType": "Order",
+                            "types": {
+                                "StarkNetDomain": [
+                                    {"name": "name", "type": "felt"},
+                                    {"name": "chainId", "type": "felt"},
+                                    {"name": "version", "type": "felt"}
+                                ],
+                                "Order": [
+                                    {"name": "timestamp", "type": "felt"},
+                                    {"name": "market", "type": "felt"},
+                                    {"name": "side", "type": "felt"},
+                                    {"name": "orderType", "type": "felt"},
+                                    {"name": "size", "type": "felt"},
+                                    {"name": "price", "type": "felt"}
+                                ]
+                            }
+                        }
+                        """,
+                timestamp, market, chainSide, orderType.getName(), chainSize.toPlainString(), chainPrice.toPlainString(), chainIdHex
+        );
     }
 }

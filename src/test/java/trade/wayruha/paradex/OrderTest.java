@@ -21,7 +21,7 @@ public class OrderTest {
     private static final String CANCEL_CLIENT_ORDER_ID = "1741023334337";
 
     public static void main(String[] args) {
-        final ParadexConfig config = new ParadexConfig(ETH_ADDRESS, PARADEX_ADDRESS, PUBLIC_KEY, PRIVATE_KEY,false);
+        final ParadexConfig config = new ParadexConfig(ETH_ADDRESS, PARADEX_ADDRESS, PUBLIC_KEY, PRIVATE_KEY, IS_MAINNET);
         authService = new AuthService(config);
 
         AuthResponse response = authService.authenticate();

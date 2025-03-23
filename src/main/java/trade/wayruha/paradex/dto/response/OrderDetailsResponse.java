@@ -1,5 +1,6 @@
 package trade.wayruha.paradex.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import trade.wayruha.paradex.dto.*;
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderDetailsResponse {
     private String id;
     private String account;

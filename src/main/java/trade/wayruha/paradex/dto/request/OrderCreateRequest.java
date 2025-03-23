@@ -1,6 +1,5 @@
 package trade.wayruha.paradex.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,6 @@ public class OrderCreateRequest extends OrderParameters {
     @JsonProperty("signature_timestamp")
     long timestamp;
 
-    @JsonIgnore
     @JsonProperty("recv_window")
     int receiveWindow;
 

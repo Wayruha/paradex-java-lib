@@ -7,7 +7,7 @@ import trade.wayruha.paradex.dto.response.OrderDetailsResponse;
 import trade.wayruha.paradex.dto.wsrequest.Auth;
 import trade.wayruha.paradex.dto.wsrequest.Subscription;
 import trade.wayruha.paradex.dto.wsrequest.WSRequest;
-import trade.wayruha.paradex.dto.wsresponse.OrderBookUpdate;
+import trade.wayruha.paradex.dto.wsresponse.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +44,37 @@ public class WebSocketClientFactory {
         client.connect(channels);
         return client;
     }
+
+    public WebSocketClient<AccountDetails> accountUpdateSubscription(WebSocketCallback<AccountDetails> callback) {
+        Objects.requireNonNull(config.getJwtToken(), "jwt token is required for userOrderUpdateSubscription");
+        final List<WSRequest> channels = new ArrayList<>();
+        channels.add(new Auth(config.getJwtToken()));
+        channels.add(new Subscription("account"));
+        final WebSocketClient<AccountDetails> client = new WebSocketClient<>(config, objectMapper, callback);
+        client.connect(channels);
+        return client;
+    }
+
+    public WebSocketClient<BalanceUpdate> balanceUpdateSubscription(WebSocketCallback<BalanceUpdate> callback) {
+        Objects.requireNonNull(config.getJwtToken(), "jwt token is required for userOrderUpdateSubscription");
+        final List<WSRequest> channels = new ArrayList<>();
+        channels.add(new Auth(config.getJwtToken()));
+        channels.add(new Subscription("balance_events"));
+        final WebSocketClient<BalanceUpdate> client = new WebSocketClient<>(config, objectMapper, callback);
+        client.connect(channels);
+        return client;
+    }
+
+    public WebSocketClient<PositionUpdate> positionUpdateSubscription(WebSocketCallback<PositionUpdate> callback) {
+        Objects.requireNonNull(config.getJwtToken(), "jwt token is required for userOrderUpdateSubscription");
+        final List<WSRequest> channels = new ArrayList<>();
+        channels.add(new Auth(config.getJwtToken()));
+        channels.add(new Subscription("positions"));
+        final WebSocketClient<PositionUpdate> client = new WebSocketClient<>(config, objectMapper, callback);
+        client.connect(channels);
+        return client;
+    }
+
 
     private static Subscription buildOrderBookSubscription(String marketSymbol) {
         final String subscriptionStr = String.format("order_book.%s.snapshot@15@100ms", marketSymbol);

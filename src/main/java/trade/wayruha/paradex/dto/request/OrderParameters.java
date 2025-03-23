@@ -1,6 +1,5 @@
 package trade.wayruha.paradex.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderParameters {
-    @JsonIgnore
     private TimeInForce instruction;
 
     /**
@@ -34,18 +32,15 @@ public class OrderParameters {
     private String clientId;
 
     /**
-     * Order flags, allow flag: REDUCE_ONLY
+     * Order flags, allow flag: REDUCE_ONLY,STOP_CONDITION_BELOW_TRIGGER,STOP_CONDITION_ABOVE_TRIGGER
      */
-    @JsonIgnore
     private List<OrderFlag> flags;
 
     /**
      * Self Trade Prevention, EXPIRE_MAKER, EXPIRE_TAKER or EXPIRE_BOTH, if empty EXPIRE_TAKER
      */
-    @JsonIgnore
     @JsonProperty("stp")
     private SelfTradePrevention selfTradePrevention;
     @Nullable
-    @JsonIgnore
     private BigDecimal triggerPrice;
 }
