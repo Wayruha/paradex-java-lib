@@ -162,7 +162,7 @@ public class WebSocketClient<T> {
         return null; //todo most likely it does not cover all cases: should be implemented
     }
 
-    private static void logOpeningException(OpeningHandshakeException e) {
+    private void logOpeningException(OpeningHandshakeException e) {
         final StatusLine sl = e.getStatusLine();
         String message = String.format("=== Status Line ===|HTTP Version  = %s|Status Code   = %d|Reason Phrase = %s|",
                 sl.getHttpVersion(), sl.getStatusCode(), sl.getReasonPhrase());
@@ -175,7 +175,7 @@ public class WebSocketClient<T> {
                 .map(entry -> entry.getValue() == null ? entry.getKey() : String.format("%s: %s", entry.getKey(), String.join(".", entry.getValue())))
                 .collect(Collectors.joining("|"));
         message += headersStr;
-        log.error("{} Opening exception details: {}", message, e.getMessage());
+        log.error("{} Opening exception: {}. Message: {}", logPrefix, message, e.getMessage());
     }
 
     private static WebSocketFactory getWebSocketFactory() {
@@ -207,6 +207,18 @@ public class WebSocketClient<T> {
         public void onError(WebSocket websocket, WebSocketException cause) {
             log.warn("{} onError: Closed by server: {}.", logPrefix, cause.getMessage());
             handleFailure(cause);
+        }
+
+        @Override
+        public void onPingFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
+            super.onPingFrame(websocket, frame);
+            lastReceivedTime = System.currentTimeMillis();
+        }
+
+        @Override
+        public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
+            super.onPongFrame(websocket, frame);
+            lastReceivedTime = System.currentTimeMillis();
         }
     }
 }
