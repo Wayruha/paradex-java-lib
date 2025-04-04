@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import trade.wayruha.paradex.ParadexConfig;
 import trade.wayruha.paradex.config.Constant;
+import trade.wayruha.paradex.dto.wsrequest.Subscription;
 import trade.wayruha.paradex.dto.wsrequest.WSRequest;
 import trade.wayruha.paradex.exception.WSException;
 
@@ -88,7 +89,9 @@ public class WebSocketClient<T> {
     public boolean sendRequest(WSRequest request) {
         try {
             final String requestStr = objectMapper.writeValueAsString(request);
-            log.debug("{} sending {}", logPrefix, requestStr);
+            if (!(request instanceof Subscription)) {
+                log.debug("{} sending {}", logPrefix, requestStr);
+            }
             webSocket.sendText(requestStr);
         } catch (Exception e) {
             log.error("{} Failed to send message: {}. Closing the connection...", logPrefix, request);
