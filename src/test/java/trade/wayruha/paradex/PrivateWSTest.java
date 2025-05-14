@@ -38,6 +38,7 @@ public class PrivateWSTest {
         factory.accountUpdateSubscription(new TestCallback<>(new TypeReference<>() {}, "account"));
         factory.userOrderUpdateSubscription(new TestCallback<>(new TypeReference<>() {}, "orders"));
         factory.positionUpdateSubscription(new TestCallback<>(new TypeReference<>() {}, "positions"));
+        factory.fillUpdateSubscription(new TestCallback<>(new TypeReference<>() {}, "fills"));
         Thread.sleep(300_000);
     }
 }

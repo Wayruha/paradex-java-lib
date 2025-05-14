@@ -75,6 +75,16 @@ public class WebSocketClientFactory {
         return client;
     }
 
+    public WebSocketClient<FillUpdate> fillUpdateSubscription(WebSocketCallback<FillUpdate> callback) {
+        Objects.requireNonNull(config.getJwtToken(), "jwt token is required for userOrderUpdateSubscription");
+        final List<WSRequest> channels = new ArrayList<>();
+        channels.add(new Auth(config.getJwtToken()));
+        channels.add(new Subscription("fills.ALL"));
+        final WebSocketClient<FillUpdate> client = new WebSocketClient<>(config, objectMapper, callback);
+        client.connect(channels);
+        return client;
+    }
+
 
     private static Subscription buildOrderBookSubscription(String marketSymbol) {
         final String subscriptionStr = String.format("order_book.%s.snapshot@15@100ms", marketSymbol);
