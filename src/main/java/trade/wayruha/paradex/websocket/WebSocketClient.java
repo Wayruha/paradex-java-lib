@@ -203,7 +203,10 @@ public class WebSocketClient<T> {
         @Override
         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) {
             log.debug("{} onDisconnected: Closed by server: {}.", logPrefix, closedByServer);
-            callback.onClosed(serverCloseFrame.getCloseCode(), serverCloseFrame.getCloseReason());
+            final WebSocketFrame frame = serverCloseFrame != null ? serverCloseFrame : clientCloseFrame;
+            final int code = frame != null ? frame.getCloseCode() : -1;
+            final String reason = frame != null ? frame.getCloseReason() : "Unknown";
+            callback.onClosed(code, reason);
         }
 
         @Override
