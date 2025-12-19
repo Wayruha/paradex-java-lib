@@ -9,7 +9,8 @@ public enum FillType {
     FILL("FILL"),
     LIQUIDATION("LIQUIDATION"),
     TRANSFER("TRANSFER"),
-    SETTLE_MARKET("SETTLE_MARKET");
+    SETTLE_MARKET("SETTLE_MARKET"),
+    RPI("RPI");
 
     @Getter
     @JsonValue

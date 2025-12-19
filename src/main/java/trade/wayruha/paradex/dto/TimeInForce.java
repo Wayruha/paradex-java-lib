@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 public enum TimeInForce {
     GTC("GTC"),
     IOC("IOC"),
-    POST_ONLY("POST_ONLY");
+    POST_ONLY("POST_ONLY"),
+    RPI("RPI");
 
     @JsonValue
     private final String name;
