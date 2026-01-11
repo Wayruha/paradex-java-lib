@@ -14,7 +14,8 @@ import trade.wayruha.paradex.dto.wsrequest.WSRequest;
 import trade.wayruha.paradex.exception.WSException;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,6 +26,8 @@ import static java.util.Optional.ofNullable;
 
 @Slf4j
 public class WebSocketClient<T> {
+    private static final int INVALID_SUBSCRIBE_ERROR_CODE = -32600;
+
     protected static long WEB_SOCKET_RECONNECTION_DELAY_MS = 10_000;
     protected final ParadexConfig config;
     protected final ObjectMapper objectMapper;
@@ -34,7 +37,7 @@ public class WebSocketClient<T> {
     protected final String logPrefix;
     protected final WebSocketFactory wsFactory;
     protected final AtomicInteger reconnectionCounter;
-    protected List<WSRequest> subscriptions;
+    protected Map<Integer, WSRequest> subscriptions;
     protected WebSocket webSocket;
     @Getter
     protected long lastReceivedTime;
@@ -44,7 +47,7 @@ public class WebSocketClient<T> {
         this.config = config;
         this.callback = callback;
         this.objectMapper = mapper;
-        this.subscriptions = List.of();
+        this.subscriptions = new HashMap<>();
         this.reconnectionCounter = new AtomicInteger(0);
         this.id = IdGenerator.getNextId();
         this.logPrefix = "[ws-" + this.id + "]";
@@ -52,12 +55,12 @@ public class WebSocketClient<T> {
     }
 
     @SneakyThrows
-    public void connect(List<WSRequest> subscriptions) {
+    public void connect(Collection<WSRequest> subscriptions) {
         try {
             log.debug("{} Connecting to: {}", logPrefix, subscriptions);
             initializeConnection();
             if (subscriptions != null) {
-                this.subscriptions = new ArrayList<>(subscriptions);
+                this.subscriptions.clear();
                 subscribe(subscriptions);
             }
         } catch (OpeningHandshakeException ex) {
@@ -75,14 +78,14 @@ public class WebSocketClient<T> {
         this.webSocket.connect();
     }
 
-    public void subscribe(List<WSRequest> subscriptions) {
+    public void subscribe(Collection<WSRequest> subscriptions) {
         subscriptions.forEach(this::subscribe);
     }
 
     @SneakyThrows
     public void subscribe(WSRequest subscription) {
         if (this.sendRequest(subscription)) {
-            this.subscriptions.add(subscription);
+            this.subscriptions.put(subscription.getId(), subscription);
         }
     }
 
@@ -90,7 +93,7 @@ public class WebSocketClient<T> {
         try {
             final String requestStr = objectMapper.writeValueAsString(request);
             if (!(request instanceof Subscription)) {
-                log.debug("{} sending {}", logPrefix, requestStr);
+                log.debug("{} sending msg({}) {}", logPrefix, request.getId(), requestStr);
             }
             webSocket.sendText(requestStr);
         } catch (Exception e) {
@@ -117,7 +120,7 @@ public class WebSocketClient<T> {
             try {
                 log.debug("{} Try to reconnect. Attempt #{}", logPrefix, reconnectionCounter.get());
                 close();
-                connect(this.subscriptions);
+                connect(this.subscriptions.values());
                 success = true;
             } catch (Exception e) {
                 log.error("{} [Connection error] Error while reconnecting: {}", logPrefix, e.getMessage(), e);
@@ -134,6 +137,14 @@ public class WebSocketClient<T> {
         try {
             T data = parseResponseBody(message);
             if (data != null) callback.onResponse(data);
+        } catch (WSException ex) {
+            if (ex.getPayload().getCode() == INVALID_SUBSCRIBE_ERROR_CODE) {
+                final WSRequest request = subscriptions.get(ex.getRequestId());
+                log.error("{} WS subscription failed {}: {}", logPrefix, request, ex.getMessage());
+            } else {
+                log.error("{} WS message parsing failed. Closing it. Response: {}", log, message, ex);
+                close();
+            }
         } catch (Exception e) {
             log.error("{} WS message parsing failed. Closing it. Response: {}", log, message, e);
             close();
@@ -153,7 +164,8 @@ public class WebSocketClient<T> {
         final ObjectNode response = objectMapper.readValue(message, ObjectNode.class);
         final JsonNode errorNode = response.get("error");
         if (errorNode != null) {
-            throw new WSException(errorNode.get("code").asInt(), errorNode.get("message").asText());
+            final WSException.Payload payload = objectMapper.convertValue(errorNode, WSException.Payload.class);
+            throw new WSException(response.get("id").asInt(), errorNode.get("code").asInt(), payload);
         }
         if (ofNullable(response.get("method"))
                 .map(JsonNode::asText)
@@ -172,7 +184,6 @@ public class WebSocketClient<T> {
 
         // HTTP headers.
         Map<String, List<String>> headers = e.getHeaders();
-        System.out.println("=== HTTP Headers ===");
         message += "||=== HTTP Headers ===|";
         final String headersStr = headers.entrySet().stream()
                 .map(entry -> entry.getValue() == null ? entry.getKey() : String.format("%s: %s", entry.getKey(), String.join(".", entry.getValue())))
@@ -191,6 +202,11 @@ public class WebSocketClient<T> {
         @Override
         public void onTextMessage(WebSocket websocket, String message) {
             handleMessage(message);
+        }
+
+        @Override
+        public void onFrameSent(WebSocket websocket, WebSocketFrame frame) throws Exception {
+            super.onFrameSent(websocket, frame);
         }
 
         @Override

@@ -1,15 +1,24 @@
 package trade.wayruha.paradex.exception;
 
+import lombok.Data;
 import lombok.Value;
 
 @Value
 public class WSException extends RuntimeException {
+    int requestId;
     int code;
-    String text;
+    Payload payload;
 
-    public WSException(int code, String description) {
-        super(code + ":" + description);
+    public WSException(int requestId, int code, Payload payload) {
+        super(code + ":" + payload);
+        this.requestId = requestId;
         this.code = code;
-        this.text = description;
+        this.payload = payload;
+    }
+
+    @Data
+    public static class Payload {
+        int code;
+        String message;
     }
 }

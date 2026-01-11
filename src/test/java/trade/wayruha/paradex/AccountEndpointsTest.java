@@ -1,5 +1,6 @@
 package trade.wayruha.paradex;
 
+import trade.wayruha.paradex.dto.MarginType;
 import trade.wayruha.paradex.dto.response.AuthResponse;
 import trade.wayruha.paradex.service.AccountService;
 import trade.wayruha.paradex.service.AuthService;
@@ -24,8 +25,9 @@ public class AccountEndpointsTest {
 
         accountService = new AccountService(config);
 
-        testGetAccountInfo();
-        testGetAllBalances();
+//        testGetAccountInfo();
+//        testGetAllBalances();
+        testUpdateLeverage();
     }
 
     private static void testGetAccountInfo() {
@@ -34,6 +36,10 @@ public class AccountEndpointsTest {
 
     private static void testGetAllBalances() {
         System.out.println(accountService.getAllBalances());
+    }
+
+    private static void testUpdateLeverage() {
+        System.out.println(accountService.setMarginConfig("BTC-USD-PERP", 3, MarginType.CROSS));
     }
 
 }
