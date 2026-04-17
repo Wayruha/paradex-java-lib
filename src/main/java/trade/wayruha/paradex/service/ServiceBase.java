@@ -19,7 +19,11 @@ public abstract class ServiceBase {
     this(new ApiClient(config));
   }
 
-  protected <T> T createService(Class<T> apiClass) {
+  public ParadexConfig getConfig() {
+    return client.getConfig();
+  }
+
+  public  <T> T createService(Class<T> apiClass) {
     return client.createService(apiClass);
   }
 
